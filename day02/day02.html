@@ -142,8 +142,8 @@ dat$CE</code></pre></div>
 <h2>Mean</h2>
 <p>The <code>mean</code> function computes the mean of a vector.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(dat$BWT)</code></pre></div>
-<div id="ex-1." class="section level3">
-<h3>Ex 1.</h3>
+<div id="exercise-1" class="section level3">
+<h3>Exercise 1</h3>
 <p>Verfiy that <span class="math inline">\(E(aX) = aE(X)\)</span>. Set <span class="math inline">\(a = 10\)</span>. Here <span class="math inline">\(X\)</span> is a vector of body weight. Use the multiplication operator <code>*</code>.</p>
 </div>
 </div>
@@ -153,8 +153,8 @@ dat$CE</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">var</span>(dat$BWT)</code></pre></div>
 <p>Alternatively, we can use the equation <span class="math inline">\(Var(X) = \frac{1}{N-1}\sum(X - \bar{X})^2\)</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>((dat$BWT -<span class="st"> </span><span class="kw">mean</span>(dat$BWT))^<span class="dv">2</span>)/(<span class="kw">length</span>(dat$BWT) -<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
-<div id="ex-2." class="section level3">
-<h3>Ex 2.</h3>
+<div id="exercise-2" class="section level3">
+<h3>Exercise 2</h3>
 <p>Verfiy that <span class="math inline">\(Var(aX) = a^2Var(X)\)</span>. Set <span class="math inline">\(a = 10\)</span>.</p>
 </div>
 </div>
@@ -165,12 +165,12 @@ dat$CE</code></pre></div>
 <p>Alternatively, we can use the equation <span class="math inline">\(Cov(X, Y) = \frac{1}{N-1}\sum(X - \bar{X})(Y - \bar{Y})\)</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>((dat$BWT -<span class="st"> </span><span class="kw">mean</span>(dat$BWT)) *<span class="st"> </span>(dat$CE -<span class="st"> </span><span class="kw">mean</span>(dat$CE)))/(<span class="kw">length</span>(dat$BWT) -<span class="st"> </span>
 <span class="st">    </span><span class="dv">1</span>)</code></pre></div>
-<div id="ex-3." class="section level3">
-<h3>Ex 3.</h3>
+<div id="exercise-3" class="section level3">
+<h3>Exercise 3</h3>
 <p>Verfiy that <span class="math inline">\(Cov(aX, Y) = aCov(X, Y)\)</span> by setting <span class="math inline">\(a = 10\)</span>. Here <span class="math inline">\(X\)</span> is a vector of body weight and <span class="math inline">\(Y\)</span> is a vector of calving ease.</p>
 </div>
-<div id="ex-4." class="section level3">
-<h3>Ex 4.</h3>
+<div id="exercise-4" class="section level3">
+<h3>Exercise 4</h3>
 <p>Verfiy that <span class="math inline">\(Cov(aX, bY) = abCov(X, Y)\)</span> by setting <span class="math inline">\(a = 10\)</span> and <span class="math inline">\(b=5\)</span>.</p>
 </div>
 </div>
@@ -183,8 +183,8 @@ dat$CE</code></pre></div>
 <h2>Regression</h2>
 <p>The regression of Y on X is given by <span class="math inline">\(b_{Y,X} = \frac{Cov(X,Y)}{Var(X)}\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(dat$BWT, dat$CE)/<span class="kw">var</span>(dat$BWT)</code></pre></div>
-<div id="ex-5." class="section level3">
-<h3>Ex 5.</h3>
+<div id="exercise-5" class="section level3">
+<h3>Exercise 5</h3>
 <p>Verfiy that regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(aX\)</span> is <span class="math inline">\(b_{Y, aX} = \frac{Cov(aX,Y)}{Var(aX)} = \frac{Cov(X,Y)}{aVar(X)}\)</span>. Set <span class="math inline">\(a = 10\)</span>.</p>
 </div>
 </div>
