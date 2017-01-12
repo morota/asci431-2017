@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Gota Morota" />
+
+<meta name="date" content="2017-01-12" />
+
+<title>Review of basic statistics</title>
+
+<script src="day02_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="day02_files/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+<script src="day02_files/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+<script src="day02_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="day02_files/magnific-popup-1.1.0/magnific-popup.css" rel="stylesheet" />
+<script src="day02_files/magnific-popup-1.1.0/jquery.magnific-popup.min.js"></script>
+<link href="day02_files/readthedown-0.1/readthedown.css" rel="stylesheet" />
+<script src="day02_files/readthedown-0.1/readthedown.js"></script>
+<script src="day02_files/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #dddddd; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { font-weight: bold; } /* Keyword */
+code > span.dt { color: #800000; } /* DataType */
+code > span.dv { color: #0000ff; } /* DecVal */
+code > span.bn { color: #0000ff; } /* BaseN */
+code > span.fl { color: #800080; } /* Float */
+code > span.ch { color: #ff00ff; } /* Char */
+code > span.st { color: #dd0000; } /* String */
+code > span.co { color: #808080; font-style: italic; } /* Comment */
+code > span.al { color: #00ff00; font-weight: bold; } /* Alert */
+code > span.fu { color: #000080; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #ff0000; font-weight: bold; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #ff00ff; } /* SpecialChar */
+code > span.vs { color: #dd0000; } /* VerbatimString */
+code > span.ss { color: #dd0000; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { font-weight: bold; } /* Preprocessor */
+code > span.at { } /* Attribute */
+code > span.do { color: #808080; font-style: italic; } /* Documentation */
+code > span.an { color: #808080; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #808080; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #808080; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+</head>
+
+<body>
+
+
+<div id="content" data-toggle="wy-nav-shift">
+
+<!-- tabsets -->
+<script src="/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+<nav id="nav-top" role="navigation" aria-label="top navigation">
+    <a role="button" href="#" data-toggle="wy-nav-top"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+</nav>
+
+
+<div id="header">
+<h1 class="title">Review of basic statistics</h1>
+</div>
+
+
+<div id="table-of-contents">
+    <h2><a href="#content">Review of basic statistics</a></h2>
+    <div id="text-table-of-contents">
+      <ul>
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#read-a-file">Read a file</a></li>
+      <li><a href="#mean">Mean</a></li>
+      <li><a href="#variance">Variance</a></li>
+      <li><a href="#covariance">Covariance</a></li>
+      <li><a href="#correlation">Correlation</a></li>
+      <li><a href="#regression">Regression</a></li>
+      <li><a href="#r-and-rstudio-cheat-sheet">R and RStudio Cheat Sheet</a></li>
+      <li><a href="#online-r-tutorials">Online R Tutorials</a></li>
+      <li><a href="#additional-reading">Additional reading</a></li>
+      </ul>
+    </div>
+</div>
+
+<div id="main">
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>We will learn how to compute basic statistics in R by using the subset of beef cattle data set.</p>
+</div>
+<div id="read-a-file" class="section level2">
+<h2>Read a file</h2>
+<div id="read-the-phenotypic-data" class="section level3">
+<h3>Read the phenotypic data</h3>
+<p>We will first set a path to the phenotypic dataset. Insert your path to the file inside double quation <code>&quot; &quot;</code>. It is very likely that your path may differ from the path below because you stored the file in a different directory.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">FILE &lt;-<span class="st"> &quot;../data/sub/1000withEffects.redangus&quot;</span></code></pre></div>
+<p>The function <code>read.table</code> reads a file in a data frame format. Typing <code>help</code> will open a documentation page.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">help</span>(read.table)</code></pre></div>
+<p>The <code>read.table</code> function has many arguments but we will use only three in this exercise.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> FILE, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p>The <code>head</code> function returns the first six rows of a data frame. The number of rows returned can be varied by controlling the argument <code>n</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(dat)
+<span class="kw">head</span>(dat, <span class="dt">n =</span> <span class="dv">10</span>)</code></pre></div>
+<p>The <code>dim</code> function returns the dimension of data frame.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(dat)</code></pre></div>
+<p>We will use two phenotypes to compute basic statistics. Each column of data frame can be accessed by the <code>$</code> operator followed by a column name.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat$BWT
+dat$CE</code></pre></div>
+<p>The <code>length</code> function returns the length of vector.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(dat$BWT)
+<span class="kw">length</span>(dat$CE)</code></pre></div>
+</div>
+</div>
+<div id="mean" class="section level2">
+<h2>Mean</h2>
+<p>The <code>mean</code> function computes the mean of a vector.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(dat$BWT)</code></pre></div>
+<div id="ex-1." class="section level3">
+<h3>Ex 1.</h3>
+<p>Verfiy that <span class="math inline">\(E(aX) = aE(X)\)</span>. Set <span class="math inline">\(a = 10\)</span>. Here <span class="math inline">\(X\)</span> is a vector of body weight. Use the multiplication operator <code>*</code>.</p>
+</div>
+</div>
+<div id="variance" class="section level2">
+<h2>Variance</h2>
+<p>The <code>var</code> function computes the sample variance of a vector.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">var</span>(dat$BWT)</code></pre></div>
+<p>Alternatively, we can use the equation <span class="math inline">\(Var(X) = \frac{1}{N-1}\sum(X - \bar{X})^2\)</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>((dat$BWT -<span class="st"> </span><span class="kw">mean</span>(dat$BWT))^<span class="dv">2</span>)/(<span class="kw">length</span>(dat$BWT) -<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<div id="ex-2." class="section level3">
+<h3>Ex 2.</h3>
+<p>Verfiy that <span class="math inline">\(Var(aX) = a^2Var(X)\)</span>. Set <span class="math inline">\(a = 10\)</span>.</p>
+</div>
+</div>
+<div id="covariance" class="section level2">
+<h2>Covariance</h2>
+<p>The <code>cov</code> function computes the covariance of two vectors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(dat$BWT, dat$CE)</code></pre></div>
+<p>Alternatively, we can use the equation <span class="math inline">\(Cov(X, Y) = \frac{1}{N-1}\sum(X - \bar{X})(Y - \bar{Y})\)</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>((dat$BWT -<span class="st"> </span><span class="kw">mean</span>(dat$BWT)) *<span class="st"> </span>(dat$CE -<span class="st"> </span><span class="kw">mean</span>(dat$CE)))/(<span class="kw">length</span>(dat$BWT) -<span class="st"> </span>
+<span class="st">    </span><span class="dv">1</span>)</code></pre></div>
+<div id="ex-3." class="section level3">
+<h3>Ex 3.</h3>
+<p>Verfiy that <span class="math inline">\(Cov(aX, Y) = aCov(X, Y)\)</span> by setting <span class="math inline">\(a = 10\)</span>. Here <span class="math inline">\(X\)</span> is a vector of body weight and <span class="math inline">\(Y\)</span> is a vector of calving ease.</p>
+</div>
+<div id="ex-4." class="section level3">
+<h3>Ex 4.</h3>
+<p>Verfiy that <span class="math inline">\(Cov(aX, bY) = abCov(X, Y)\)</span> by setting <span class="math inline">\(a = 10\)</span> and <span class="math inline">\(b=5\)</span>.</p>
+</div>
+</div>
+<div id="correlation" class="section level2">
+<h2>Correlation</h2>
+<p>The <code>cor</code> function computes the correlation of two vectors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(dat$BWT, dat$CE)</code></pre></div>
+</div>
+<div id="regression" class="section level2">
+<h2>Regression</h2>
+<p>The regression of Y on X is given by <span class="math inline">\(b_{Y,X} = \frac{Cov(X,Y)}{Var(X)}\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(dat$BWT, dat$CE)/<span class="kw">var</span>(dat$BWT)</code></pre></div>
+<div id="ex-5." class="section level3">
+<h3>Ex 5.</h3>
+<p>Verfiy that regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(aX\)</span> is <span class="math inline">\(b_{Y, aX} = \frac{Cov(aX,Y)}{Var(aX)} = \frac{Cov(X,Y)}{aVar(X)}\)</span>. Set <span class="math inline">\(a = 10\)</span>.</p>
+</div>
+</div>
+<div id="r-and-rstudio-cheat-sheet" class="section level2">
+<h2>R and RStudio Cheat Sheet</h2>
+<ul>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf">R</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2016/01/rstudio-IDE-cheatsheet.pdf">RStudio</a></li>
+</ul>
+</div>
+<div id="online-r-tutorials" class="section level2">
+<h2>Online R Tutorials</h2>
+<ul>
+<li><a href="http://tryr.codeschool.com">Code School: Try R</a></li>
+<li><a href="http://www.quantide.com/rabbit-introduction-to-r/">Rabbit: Introduction to R</a></li>
+<li><a href="http://swirlstats.com/">swirl</a></li>
+<li><a href="http://www.statsteachr.org/">statsTeachR</a></li>
+</ul>
+</div>
+<div id="additional-reading" class="section level2">
+<h2>Additional reading</h2>
+<ul>
+<li>Fienberg (2014) <a href="http://www.annualreviews.org/doi/abs/10.1146/annurev-statistics-022513-115703">What is Statistics?</a>. Annual Review of Statistics and Its Application.</li>
+</ul>
+</div>
+</div>
+
+
+</div>
+
+<div id="postamble" data-toggle="wy-nav-shift" class="status">
+<p class="author"><span class="glyphicon glyphicon-user"></span> Gota Morota</p>
+<p class="date"><span class="glyphicon glyphicon-calendar"></span> January 12, 2017</p>
+</div>
+
+
+<script>
+$(document).ready(function () {
+ 	  });
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
