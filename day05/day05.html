@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Gota Morota" />
+
+<meta name="date" content="2017-01-24" />
+
+<title>Review of allele and genotypic frequencies</title>
+
+<script src="day05_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="day05_files/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+<script src="day05_files/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+<script src="day05_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="day05_files/magnific-popup-1.1.0/magnific-popup.css" rel="stylesheet" />
+<script src="day05_files/magnific-popup-1.1.0/jquery.magnific-popup.min.js"></script>
+<link href="day05_files/readthedown-0.1/readthedown.css" rel="stylesheet" />
+<script src="day05_files/readthedown-0.1/readthedown.js"></script>
+<script src="day05_files/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #dddddd; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { font-weight: bold; } /* Keyword */
+code > span.dt { color: #800000; } /* DataType */
+code > span.dv { color: #0000ff; } /* DecVal */
+code > span.bn { color: #0000ff; } /* BaseN */
+code > span.fl { color: #800080; } /* Float */
+code > span.ch { color: #ff00ff; } /* Char */
+code > span.st { color: #dd0000; } /* String */
+code > span.co { color: #808080; font-style: italic; } /* Comment */
+code > span.al { color: #00ff00; font-weight: bold; } /* Alert */
+code > span.fu { color: #000080; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #ff0000; font-weight: bold; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #ff00ff; } /* SpecialChar */
+code > span.vs { color: #dd0000; } /* VerbatimString */
+code > span.ss { color: #dd0000; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { font-weight: bold; } /* Preprocessor */
+code > span.at { } /* Attribute */
+code > span.do { color: #808080; font-style: italic; } /* Documentation */
+code > span.an { color: #808080; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #808080; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #808080; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+</head>
+
+<body>
+
+
+<div id="content" data-toggle="wy-nav-shift">
+
+<!-- tabsets -->
+<script src="/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+<nav id="nav-top" role="navigation" aria-label="top navigation">
+    <a role="button" href="#" data-toggle="wy-nav-top"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+</nav>
+
+
+<div id="header">
+<h1 class="title">Review of allele and genotypic frequencies</h1>
+</div>
+
+
+<div id="table-of-contents">
+    <h2><a href="#content">Review of allele and genotypic frequencies</a></h2>
+    <div id="text-table-of-contents">
+      <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#read-a-file">Read a file</a></li>
+      <li><a href="#allele-frequency">Allele frequency</a></li>
+      <li><a href="#genotypic-frequency">Genotypic frequency</a></li>
+      <li><a href="#another-approach-for-obtaining-allele-frequency">Another approach for obtaining allele frequency</a></li>
+      <li><a href="#save-r-objects">Save R objects</a></li>
+      </ul>
+    </div>
+</div>
+
+<div id="main">
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>We will learn how to compute allele frequencies in R by using the beef cattle data set.</p>
+</div>
+<div id="read-a-file" class="section level2">
+<h2>Read a file</h2>
+<p>Use the function <code>read.table</code> to read the genotype file in a data frame format.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">W &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="kw">file.choose</span>(), <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p>We can access the certain rows or columns by entering their coordinates in the single square bracket <code>[]</code> operator. When one of the coordinate is omitted, the operator returns a one-row or one-column data frame.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(W[<span class="dv">1</span>, <span class="dv">1</span>])  <span class="co"># 1st row and 1st column </span>
+<span class="kw">head</span>(W[, <span class="dv">1</span>])  <span class="co"># one-column data frame</span></code></pre></div>
+<p>We then drop the first column of data frame which is the animal IDs. The <code>-</code> sign indicates dropping variables. So <code>-1</code> means dropping the first column.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">W &lt;-<span class="st"> </span>W[, -<span class="dv">1</span>]</code></pre></div>
+<p>Next, we will convert <code>W</code> into a matrix from a data frame. In R, matrices are more memory efficient and more convinient to do linear algebra-type of operations.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">W &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(W)</code></pre></div>
+<p>What is the dimension of <code>W</code>?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(W)</code></pre></div>
+<div id="recoding-of-markers" class="section level3">
+<h3>Recoding of markers</h3>
+<p>We will recode the genotypes so that three genotypes <em>AA</em>, <em>Aa</em>, and <em>aa</em> are coded as 2, 1, and 0, respectively.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">W[W ==<span class="st"> </span><span class="dv">10</span>] &lt;-<span class="st"> </span><span class="dv">2</span>
+W[W ==<span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="dv">1</span>
+W[W ==<span class="st"> </span>-<span class="dv">10</span>] &lt;-<span class="st"> </span><span class="dv">0</span></code></pre></div>
+</div>
+</div>
+<div id="allele-frequency" class="section level2">
+<h2>Allele frequency</h2>
+<p>Let’s compute the allele frequency of SNP. The <code>table</code> function returns frequncies of genotypes.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(W[, <span class="dv">1</span>])</code></pre></div>
+<p>We can see that there are 563 <em>AA</em> animals, 372 <em>Aa</em> animals, and 65 <em>aa</em> animals. Let’s assign these numbers into variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nAA &lt;-<span class="st"> </span><span class="kw">table</span>(W[, <span class="dv">1</span>])[<span class="dv">3</span>]
+nAa &lt;-<span class="st"> </span><span class="kw">table</span>(W[, <span class="dv">1</span>])[<span class="dv">2</span>]
+naa &lt;-<span class="st"> </span><span class="kw">table</span>(W[, <span class="dv">1</span>])[<span class="dv">1</span>]</code></pre></div>
+<p>Allele frequency of <em>A</em> is given by <span class="math display">\[ 
+f(A) = p = \frac{2 \times (\text{no. of } AA \text{ individuals}) + 1 \times (\text{no. of } Aa \text{ individuals})}{2 \times \text{total no. of individuals}}.
+\]</span></p>
+<div id="exercise-1" class="section level3">
+<h3>Exercise 1</h3>
+<p>Use the variables <code>nAA</code>, <code>nAa</code>, and <code>naa</code> defined above and compute the allele frequency of <em>A</em> and <em>a</em> in the first SNP.</p>
+</div>
+</div>
+<div id="genotypic-frequency" class="section level2">
+<h2>Genotypic frequency</h2>
+<p>Genotypic frequency is given by <span class="math display">\[ 
+f(AA) = P = \frac{\text{No. of } AA \text{ individuals}}{\text{Total no. individuals}} \\
+f(Aa) = H = \frac{\text{No. of } Aa \text{ individuals}}{\text{Total no. individuals}} \\
+f(aa) = Q = \frac{\text{No. of } aa \text{ individuals}}{\text{Total no. individuals}}. \\
+\]</span></p>
+<div id="exercise-2" class="section level3">
+<h3>Exercise 2</h3>
+<p>What is the genotypic frequency of <code>AA</code>, <code>Aa</code>, and <code>aa</code> in the first SNP?</p>
+</div>
+</div>
+<div id="another-approach-for-obtaining-allele-frequency" class="section level2">
+<h2>Another approach for obtaining allele frequency</h2>
+<p><span class="math display">\[ 
+f(A) = p = \frac{2 \times (\text{frequency of } AA) + 1 \times (\text{frequency of } Aa)}{2 \times (\text{frequency of } AA + Aa + aa)}.
+\]</span></p>
+<div id="exercise-3" class="section level3">
+<h3>Exercise 3</h3>
+<p>Use the variables <code>P</code>, <code>H</code>, and <code>Q</code> defined above and compute the allele frequency of <em>A</em> and <em>a</em> in the first SNP.</p>
+</div>
+</div>
+<div id="save-r-objects" class="section level2">
+<h2>Save R objects</h2>
+<p>Save the variable <code>W</code> so that we can reuse in the next class.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">save</span>(W, <span class="dt">file =</span> <span class="st">&quot;W.Rda&quot;</span>)</code></pre></div>
+</div>
+</div>
+
+
+</div>
+
+<div id="postamble" data-toggle="wy-nav-shift" class="status">
+<p class="author"><span class="glyphicon glyphicon-user"></span> Gota Morota</p>
+<p class="date"><span class="glyphicon glyphicon-calendar"></span> January 24, 2017</p>
+</div>
+
+
+<script>
+$(document).ready(function () {
+ 	  });
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
