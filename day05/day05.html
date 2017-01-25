@@ -113,10 +113,10 @@ $(document).ready(function () {
 </div>
 <div id="read-a-file" class="section level2">
 <h2>Read a file</h2>
-<p>Use the function <code>read.table</code> to read the genotype file in a data frame format.</p>
+<p>Use the function <code>read.table</code> to read the genotype file (imputed1000.geno) in a data frame format.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">W &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="kw">file.choose</span>(), <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <p>We can access a certain element in the data frame by entering its coordinate in the single square bracket <code>[]</code> operator. Let’s first access the element in the first column and the first row. When the row coordinate is omitted, the operator returns a data frame with just a single column.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(W[<span class="dv">1</span>, <span class="dv">1</span>])  <span class="co"># 1st row and 1st column </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">W[<span class="dv">1</span>, <span class="dv">1</span>]  <span class="co"># 1st row and 1st column </span>
 <span class="kw">head</span>(W[, <span class="dv">1</span>])  <span class="co"># one-column data frame</span></code></pre></div>
 <p>We then drop the first column of data frame which is the animal IDs. The <code>-</code> sign indicates dropping variables. So <code>-1</code> means dropping the first column.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">W &lt;-<span class="st"> </span>W[, -<span class="dv">1</span>]</code></pre></div>
