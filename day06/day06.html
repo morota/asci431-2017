@@ -112,19 +112,19 @@ $(document).ready(function () {
 </div>
 <div id="read-a-file" class="section level2">
 <h2>Read a file</h2>
-<p>Use the function <code>load</code> to reload the SNP matrix <code>W.Rda</code>, that we saved as an R object in the previous class.</p>
+<p>Use the function <code>load</code> to reload the SNP matrix <code>W.Rda</code>, which we saved as an R object in the previous class.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="dt">file =</span> <span class="kw">file.choose</span>())</code></pre></div>
 </div>
 <div id="compute-allele-frequencies-for-all-snps" class="section level2">
 <h2>Compute allele frequencies for all SNPs</h2>
-<p>We have learned how to the compute allele frequency of the first SNP using the <code>table</code> function. Here let’s consider how to compute allele frequencies for the entire SNPs. Of course we can apply <code>table</code> function manually one at a time. However, this approach takes too much time to compute allele frequencies for 5,000 SNPs. Recall that allele frequency of <em>A</em> is given by <span class="math display">\[ 
+<p>We have learned how to compute allele frequency of the first SNP using the <code>table</code> function. Here, we consider how to compute allele frequencies for the entire SNPs. Of course we can apply the <code>table</code> function manually one at a time. However, this approach takes too much time to compute allele frequencies for 5,000 SNPs. Recall that allele frequency of <em>A</em> is given by <span class="math display">\[ 
 f(A) = p = \frac{2 \times (\text{no. of } AA \text{ individuals}) + 1 \times (\text{no. of } Aa \text{ individuals})}{2 \times \text{total no. of individuals}}.
 \]</span> We can rewrite this equation into <span class="math display">\[ 
 f(A) = p = \frac{(\text{no. of } A \text{ allele in the population})}{2 \times \text{total no. of individuals}}.
 \]</span> This suggests that all we need is the number of <span class="math inline">\(A\)</span> allele or reference allele <span class="math inline">\(a\)</span> for each SNP. The <code>sum</code> function returns the number of reference allele <span class="math inline">\(A\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(W[, <span class="dv">1</span>])  <span class="co"># sum of A allele in the first SNP</span>
 <span class="kw">sum</span>(W[, <span class="dv">2</span>])  <span class="co"># sum of A allele in the second SNP</span></code></pre></div>
-<p>How to extend this operation up to 5,000 SNPs? The <code>colSums</code> function returns the sum of each column in a matrix as a vector.</p>
+<p>How to repeat this operation for 5,000 SNPs? The <code>colSums</code> function returns the sum of each column in a matrix as a vector.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colSums</span>(W)</code></pre></div>
 <p>Note that <code>colSums(W)</code> gives the numerator of the above equation. We then divide this number by <span class="math inline">\(2 \times \text{total no. of individuals}\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span><span class="kw">colSums</span>(W)/(<span class="dv">2</span> *<span class="st"> </span><span class="kw">nrow</span>(W))</code></pre></div>
