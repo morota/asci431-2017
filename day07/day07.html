@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Gota Morota" />
+
+<meta name="date" content="2017-01-31" />
+
+<title>The basis of genetic likeness</title>
+
+<script src="day07_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="day07_files/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+<script src="day07_files/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+<script src="day07_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="day07_files/magnific-popup-1.1.0/magnific-popup.css" rel="stylesheet" />
+<script src="day07_files/magnific-popup-1.1.0/jquery.magnific-popup.min.js"></script>
+<link href="day07_files/readthedown-0.1/readthedown.css" rel="stylesheet" />
+<script src="day07_files/readthedown-0.1/readthedown.js"></script>
+<script src="day07_files/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #dddddd; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { font-weight: bold; } /* Keyword */
+code > span.dt { color: #800000; } /* DataType */
+code > span.dv { color: #0000ff; } /* DecVal */
+code > span.bn { color: #0000ff; } /* BaseN */
+code > span.fl { color: #800080; } /* Float */
+code > span.ch { color: #ff00ff; } /* Char */
+code > span.st { color: #dd0000; } /* String */
+code > span.co { color: #808080; font-style: italic; } /* Comment */
+code > span.al { color: #00ff00; font-weight: bold; } /* Alert */
+code > span.fu { color: #000080; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #ff0000; font-weight: bold; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #ff00ff; } /* SpecialChar */
+code > span.vs { color: #dd0000; } /* VerbatimString */
+code > span.ss { color: #dd0000; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { font-weight: bold; } /* Preprocessor */
+code > span.at { } /* Attribute */
+code > span.do { color: #808080; font-style: italic; } /* Documentation */
+code > span.an { color: #808080; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #808080; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #808080; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+</head>
+
+<body>
+
+
+<div id="content" data-toggle="wy-nav-shift">
+
+<!-- tabsets -->
+<script src="/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+<nav id="nav-top" role="navigation" aria-label="top navigation">
+    <a role="button" href="#" data-toggle="wy-nav-top"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+</nav>
+
+
+<div id="header">
+<h1 class="title">The basis of genetic likeness</h1>
+</div>
+
+
+<div id="table-of-contents">
+    <h2><a href="#content">The basis of genetic likeness</a></h2>
+    <div id="text-table-of-contents">
+      <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#reading-file">Reading file</a></li>
+      <li><a href="#unknown-pedigree">Unknown pedigree</a></li>
+      <li><a href="#synbreed-package">synbreed package</a></li>
+      <li><a href="#kinship2-package">kinship2 package</a></li>
+      </ul>
+    </div>
+</div>
+
+<div id="main">
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>We will learn how to compute a relationship matrix using the tabular method.</p>
+</div>
+<div id="reading-file" class="section level2">
+<h2>Reading file</h2>
+<p>Use the function <code>read.table</code> to read the phenotype file (1000withEffects.redangus) in a data frame format.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="kw">file.choose</span>(), <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+<span class="kw">head</span>(dat)</code></pre></div>
+</div>
+<div id="unknown-pedigree" class="section level2">
+<h2>Unknown pedigree</h2>
+<p>From the <code>dat</code>, let’s create a new variable <code>ped</code> which only have three columns: animal ID, sire ID, and dam ID.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ped &lt;-<span class="st"> </span>dat[, <span class="kw">c</span>(<span class="st">&quot;REG&quot;</span>, <span class="st">&quot;SIRE&quot;</span>, <span class="st">&quot;DAM&quot;</span>)]
+<span class="kw">head</span>(ped)
+<span class="kw">dim</span>(ped)</code></pre></div>
+<p>All the animals with animal ID are the ones with phenotyped animals. Animals which only apper in the <code>SIRE</code> or <code>DAM</code> column also need to be listed in the <code>REG</code> column. For instance, consider the the following example from Legarra et al. (2009) JDS. <span class="math display">\[\begin{array}{ccc}
+\text{REG} &amp; \text{SIRE} &amp; \text{DAM} \\
+ 9  &amp;  1  &amp;  2 \\
+10  &amp;  3  &amp;  4 \\
+11 &amp;   5  &amp;  6 \\
+12  &amp;  7  &amp;  8 \\
+13  &amp;  9  &amp; 10 \\
+14  &amp; 11  &amp; 12 \\
+15  &amp;  4  &amp; 11 \\
+16  &amp; 13  &amp; 15 \\
+17  &amp; 13  &amp; 14 
+\end{array}\]</span> Note that animal IDs 1 to 8 have no phenotypic records so they only appear in the <code>SIRE</code> or <code>DAM</code> column. The final pedigree data frame should look like the following where animals 1 to 8 also appear in the <code>REG</code> column with <code>SIRE</code> and <code>DAM</code> IDs set to unknown == 0. <span class="math display">\[\begin{array}{ccc}
+\text{REG} &amp; \text{SIRE} &amp; \text{DAM} \\
+ 1   &amp;  0  &amp;  0 \\
+ 2  &amp;  0  &amp;  0 \\
+ 3  &amp;  0 &amp;   0 \\
+ 4  &amp;  0 &amp;   0 \\
+ 5 &amp;   0 &amp;   0 \\
+ 6  &amp;  0  &amp;  0 \\
+ 7  &amp;  0  &amp;  0 \\
+ 8 &amp;   0 &amp;   0 \\
+ 9  &amp;  1  &amp;  2 \\
+10  &amp;  3  &amp;  4 \\
+11 &amp;   5  &amp;  6 \\
+12  &amp;  7  &amp;  8 \\
+13  &amp;  9  &amp; 10 \\
+14  &amp; 11  &amp; 12 \\
+15  &amp;  4  &amp; 11 \\
+16  &amp; 13  &amp; 15 \\
+17  &amp; 13  &amp; 14 
+\end{array}\]</span></p>
+<p>Now let’s find out how many animals only appear as sires or dams?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Sire</span>
+<span class="kw">table</span>(!ped$SIRE %in%<span class="st"> </span>ped$REG)
+unknown.sire &lt;-<span class="st"> </span><span class="kw">unique</span>(ped$SIRE[!ped$SIRE %in%<span class="st"> </span>ped$REG])  <span class="co"># only appear as sire</span>
+<span class="kw">head</span>(unknown.sire)
+<span class="kw">length</span>(unknown.sire)
+
+<span class="co"># Dam</span>
+<span class="kw">table</span>(!ped$DAM %in%<span class="st"> </span>ped$REG)
+unknown.dam &lt;-<span class="st"> </span><span class="kw">unique</span>(ped$DAM[!ped$DAM %in%<span class="st"> </span>ped$REG])  <span class="co"># only appear as dam</span>
+<span class="kw">length</span>(unknown.dam)</code></pre></div>
+<p>We will create a new variable <code>unknown</code> to store animals with unknown sires and dams.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Total</span>
+unknown &lt;-<span class="st"> </span><span class="kw">c</span>(unknown.sire, unknown.dam)
+<span class="kw">length</span>(unknown)</code></pre></div>
+<p>Before we create a new data frame for <code>unknown</code>, we sort animals with unknown sires and dams in ascending order.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">unknown &lt;-<span class="st"> </span>unknown[<span class="kw">order</span>(unknown)]  <span class="co"># sort unknown animal in ascending order</span>
+<span class="kw">head</span>(unknown)</code></pre></div>
+<p>Next, we will create a pedigree data frame for <code>unknown</code>. We set <code>SIRE</code> and <code>DAM</code> columns equal to zero.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create unknownped and combine to ped</span>
+unknown.ped &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">REG =</span> unknown, <span class="dt">SIRE =</span> <span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(unknown)), <span class="dt">DAM =</span> <span class="kw">rep</span>(<span class="dv">0</span>, 
+    <span class="kw">length</span>(unknown)))
+<span class="kw">head</span>(unknown.ped)
+<span class="kw">dim</span>(unknown.ped)</code></pre></div>
+<p>Finally, we combine <code>ped</code> and <code>unknown.ped</code> into a single data frame <code>all.ped</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">all.ped &lt;-<span class="st"> </span><span class="kw">rbind</span>(unknown.ped, ped)
+<span class="kw">dim</span>(all.ped)</code></pre></div>
+</div>
+<div id="synbreed-package" class="section level2">
+<h2>synbreed package</h2>
+<p>The <a href="https://cran.r-project.org/web/packages/synbreed/index.html">synbreed</a> package includes the function <code>kin</code> for computing a relationship matrix. Learn more about the <a href="http://www.synbreed.tum.de/index.php?id=2">Synbreed</a> project. The <code>kin</code> function requires the object of class gpData for inputs.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(synbreed)
+gp.ped &lt;-<span class="st"> </span><span class="kw">create.pedigree</span>(<span class="dt">ID =</span> all.ped$REG, <span class="dt">Par1 =</span> all.ped$SIRE, <span class="dt">Par2 =</span> all.ped$DAM, 
+    <span class="dt">unknown =</span> <span class="st">&quot;0&quot;</span>)
+gpData &lt;-<span class="st"> </span><span class="kw">create.gpData</span>(<span class="dt">pedigree =</span> gp.ped)
+<span class="kw">class</span>(gpData)</code></pre></div>
+<p>We can obtain an additive relationship matrix by setting the argument <code>ret</code> equals to <code>add</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">kin</span>(gpData, <span class="dt">ret =</span> <span class="st">&quot;add&quot;</span>)
+<span class="kw">dim</span>(A)
+<span class="kw">table</span>(<span class="kw">colnames</span>(A) ==<span class="st"> </span><span class="kw">rownames</span>(A))</code></pre></div>
+<p>One thing we need to be cautious is that the <code>kin</code> function does not retrain the original order.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">colnames</span>(A))
+<span class="kw">head</span>(all.ped)</code></pre></div>
+<p>This brings up a problem when we want to link phenotypic values to the A matrix because animals appear in a different order. So let’s keep the original order of animal IDs in the <code>ped</code> object and remove animals without records from the A matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">index &lt;-<span class="st"> </span><span class="kw">match</span>(ped$REG, <span class="kw">rownames</span>(A))
+A2 &lt;-<span class="st"> </span>A[index, index]
+<span class="kw">dim</span>(A2)</code></pre></div>
+<p>The <code>A2</code> object is a reordered A matrix where animals appear in the same order as that of the <code>ped</code> object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(ped$REG)
+<span class="kw">head</span>(<span class="kw">rownames</span>(A2))
+<span class="kw">table</span>(ped$REG ==<span class="st"> </span><span class="kw">rownames</span>(A2))
+<span class="kw">table</span>(ped$REG ==<span class="st"> </span><span class="kw">colnames</span>(A2))</code></pre></div>
+<div id="exercise-1" class="section level3">
+<h3>Exercise 1</h3>
+<p>Compute the inbreeding coefficients of animals and report the averages of inbreeding coefficients.</p>
+</div>
+</div>
+<div id="kinship2-package" class="section level2">
+<h2>kinship2 package</h2>
+<p>Alternatively, we can use the <code>kinship2</code> package to compute a relationship matrix. The <code>kinship</code> functions returns the <strong>coefficient of kinship</strong>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(kinship2)
+A3 &lt;-<span class="st"> </span><span class="kw">kinship</span>(all.ped$REG, all.ped$SIRE, all.ped$DAM)
+<span class="kw">dim</span>(A3)
+<span class="kw">table</span>(<span class="kw">colnames</span>(A3) ==<span class="st"> </span><span class="kw">rownames</span>(A3))</code></pre></div>
+<p>Again, let’s make sure that animals in the A matrix appear in the same order as that of the <code>ped</code> object. The <code>A4</code> object is now the reordered A matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">index2 &lt;-<span class="st"> </span><span class="kw">match</span>(ped$REG, <span class="kw">rownames</span>(A3))
+A4 &lt;-<span class="st"> </span>A3[index2, index2]
+<span class="kw">dim</span>(A4)
+<span class="kw">head</span>(ped$REG)
+<span class="kw">head</span>(<span class="kw">rownames</span>(A4))
+<span class="kw">table</span>(ped$REG ==<span class="st"> </span><span class="kw">rownames</span>(A4))
+<span class="kw">table</span>(ped$REG ==<span class="st"> </span><span class="kw">colnames</span>(A4))</code></pre></div>
+<div id="exercise-2" class="section level3">
+<h3>Exercise 2</h3>
+<p>Recall that the additive genetic relationship between a pair of individuals is equal to twice their coefficient of kinship. Verify this fact by comapring <code>A2</code> and <code>A4</code> objects.</p>
+</div>
+</div>
+</div>
+
+
+</div>
+
+<div id="postamble" data-toggle="wy-nav-shift" class="status">
+<p class="author"><span class="glyphicon glyphicon-user"></span> Gota Morota</p>
+<p class="date"><span class="glyphicon glyphicon-calendar"></span> January 31, 2017</p>
+</div>
+
+
+<script>
+$(document).ready(function () {
+ 	  });
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
