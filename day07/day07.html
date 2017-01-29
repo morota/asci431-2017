@@ -108,7 +108,7 @@ $(document).ready(function () {
 <div id="main">
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>We will learn how to compute a relationship matrix using the tabular method.</p>
+<p>We will learn how to compute an additive relationship matrix from pedigree using the tabular method.</p>
 </div>
 <div id="reading-file" class="section level2">
 <h2>Reading file</h2>
@@ -118,11 +118,11 @@ $(document).ready(function () {
 </div>
 <div id="unknown-pedigree" class="section level2">
 <h2>Unknown pedigree</h2>
-<p>From the <code>dat</code>, let’s create a new variable <code>ped</code> which only have three columns: animal ID, sire ID, and dam ID.</p>
+<p>From the <code>dat</code>, let’s create a new variable <code>ped</code> that only has three columns: animal ID, sire ID, and dam ID.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ped &lt;-<span class="st"> </span>dat[, <span class="kw">c</span>(<span class="st">&quot;REG&quot;</span>, <span class="st">&quot;SIRE&quot;</span>, <span class="st">&quot;DAM&quot;</span>)]
 <span class="kw">head</span>(ped)
 <span class="kw">dim</span>(ped)</code></pre></div>
-<p>All the animals with animal ID are the ones with phenotyped animals. Animals which only apper in the <code>SIRE</code> or <code>DAM</code> column also need to be listed in the <code>REG</code> column. For instance, consider the the following example from Legarra et al. (2009) JDS. <span class="math display">\[\begin{array}{ccc}
+<p>Phenotyped animals are the ones with animal IDs. If there are any animals that appear only in the <code>SIRE</code> or <code>DAM</code> column, they need to be listed in the <code>REG</code> column as well. For instance, consider the the following example from Legarra et al. (2009) JDS. <span class="math display">\[\begin{array}{ccc}
 \text{REG} &amp; \text{SIRE} &amp; \text{DAM} \\
  9  &amp;  1  &amp;  2 \\
 10  &amp;  3  &amp;  4 \\
@@ -153,7 +153,7 @@ $(document).ready(function () {
 16  &amp; 13  &amp; 15 \\
 17  &amp; 13  &amp; 14 
 \end{array}\]</span></p>
-<p>Now let’s find out how many animals only appear as sires or dams?</p>
+<p>Now let’s find out how many animals appear only as sires or dams.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Sire</span>
 <span class="kw">table</span>(!ped$SIRE %in%<span class="st"> </span>ped$REG)
 unknown.sire &lt;-<span class="st"> </span><span class="kw">unique</span>(ped$SIRE[!ped$SIRE %in%<span class="st"> </span>ped$REG])  <span class="co"># only appear as sire</span>
@@ -193,10 +193,10 @@ gpData &lt;-<span class="st"> </span><span class="kw">create.gpData</span>(<span
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">kin</span>(gpData, <span class="dt">ret =</span> <span class="st">&quot;add&quot;</span>)
 <span class="kw">dim</span>(A)
 <span class="kw">table</span>(<span class="kw">colnames</span>(A) ==<span class="st"> </span><span class="kw">rownames</span>(A))</code></pre></div>
-<p>One thing we need to be cautious is that the <code>kin</code> function does not retrain the original order.</p>
+<p>One thing we need to be cautious of is that the <code>kin</code> function does not retrain the original order.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">colnames</span>(A))
 <span class="kw">head</span>(all.ped)</code></pre></div>
-<p>This brings up a problem when we want to link phenotypic values to the A matrix because animals appear in a different order. So let’s keep the original order of animal IDs in the <code>ped</code> object and remove animals without records from the A matrix.</p>
+<p>This brings up a problem when we want to link phenotypic values to the A matrix because animals appear in a different order. So let’s keep the original order of animal IDs in the <code>ped</code> object and remove all animals that do not have records in the A matrix.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">index &lt;-<span class="st"> </span><span class="kw">match</span>(ped$REG, <span class="kw">rownames</span>(A))
 A2 &lt;-<span class="st"> </span>A[index, index]
 <span class="kw">dim</span>(A2)</code></pre></div>
@@ -207,12 +207,12 @@ A2 &lt;-<span class="st"> </span>A[index, index]
 <span class="kw">table</span>(ped$REG ==<span class="st"> </span><span class="kw">colnames</span>(A2))</code></pre></div>
 <div id="exercise-1" class="section level3">
 <h3>Exercise 1</h3>
-<p>Compute the inbreeding coefficients of animals and report the averages of inbreeding coefficients.</p>
+<p>Compute the inbreeding coefficients of animals and report the average of inbreeding coefficients.</p>
 </div>
 </div>
 <div id="kinship2-package" class="section level2">
 <h2>kinship2 package</h2>
-<p>Alternatively, we can use the <code>kinship2</code> package to compute a relationship matrix. The <code>kinship</code> functions returns the <strong>coefficient of kinship</strong>.</p>
+<p>Alternatively, we can use the <code>kinship2</code> package to compute a relationship matrix. The <code>kinship</code> function returns the <strong>coefficient of kinship</strong>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(kinship2)
 A3 &lt;-<span class="st"> </span><span class="kw">kinship</span>(all.ped$REG, all.ped$SIRE, all.ped$DAM)
 <span class="kw">dim</span>(A3)
