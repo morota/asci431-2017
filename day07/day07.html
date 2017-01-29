@@ -133,7 +133,7 @@ $(document).ready(function () {
 15  &amp;  4  &amp; 11 \\
 16  &amp; 13  &amp; 15 \\
 17  &amp; 13  &amp; 14 
-\end{array}\]</span> Note that animal IDs 1 to 8 have no phenotypic records so they only appear in the <code>SIRE</code> or <code>DAM</code> column. The final pedigree data frame should look like the following where animals 1 to 8 also appear in the <code>REG</code> column with <code>SIRE</code> and <code>DAM</code> IDs set to unknown == 0. <span class="math display">\[\begin{array}{ccc}
+\end{array}\]</span> Note that animal IDs 1 to 8 have no phenotypic records so they only appear in the <code>SIRE</code> or <code>DAM</code> column. The final pedigree data frame should look like the following where animals 1 to 8 also appear in the <code>REG</code> column with the <code>SIRE</code> and <code>DAM</code> IDs set to unknown = 0. <span class="math display">\[\begin{array}{ccc}
 \text{REG} &amp; \text{SIRE} &amp; \text{DAM} \\
  1   &amp;  0  &amp;  0 \\
  2  &amp;  0  &amp;  0 \\
@@ -168,16 +168,15 @@ unknown.dam &lt;-<span class="st"> </span><span class="kw">unique</span>(ped$DAM
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Total</span>
 unknown &lt;-<span class="st"> </span><span class="kw">c</span>(unknown.sire, unknown.dam)
 <span class="kw">length</span>(unknown)</code></pre></div>
-<p>Before we create a new data frame for <code>unknown</code>, we sort animals with unknown sires and dams in ascending order.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">unknown &lt;-<span class="st"> </span>unknown[<span class="kw">order</span>(unknown)]  <span class="co"># sort unknown animal in ascending order</span>
+<p>Before we create a new data frame for the <code>unknown</code>, we sort animals with unknown sires and dams in ascending order.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">unknown &lt;-<span class="st"> </span>unknown[<span class="kw">order</span>(unknown)]  <span class="co"># sort unknown animals in ascending order</span>
 <span class="kw">head</span>(unknown)</code></pre></div>
-<p>Next, we will create a pedigree data frame for <code>unknown</code>. We set <code>SIRE</code> and <code>DAM</code> columns equal to zero.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create unknownped and combine to ped</span>
-unknown.ped &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">REG =</span> unknown, <span class="dt">SIRE =</span> <span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(unknown)), <span class="dt">DAM =</span> <span class="kw">rep</span>(<span class="dv">0</span>, 
+<p>Next, we will create a pedigree data frame for the <code>unknown</code>. We set the <code>SIRE</code> and <code>DAM</code> columns equal to zero.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">unknown.ped &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">REG =</span> unknown, <span class="dt">SIRE =</span> <span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(unknown)), <span class="dt">DAM =</span> <span class="kw">rep</span>(<span class="dv">0</span>, 
     <span class="kw">length</span>(unknown)))
 <span class="kw">head</span>(unknown.ped)
 <span class="kw">dim</span>(unknown.ped)</code></pre></div>
-<p>Finally, we combine <code>ped</code> and <code>unknown.ped</code> into a single data frame <code>all.ped</code>.</p>
+<p>Finally, we combine the <code>ped</code> and <code>unknown.ped</code> objects into a single data frame <code>all.ped</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">all.ped &lt;-<span class="st"> </span><span class="kw">rbind</span>(unknown.ped, ped)
 <span class="kw">dim</span>(all.ped)</code></pre></div>
 </div>
@@ -217,7 +216,7 @@ A2 &lt;-<span class="st"> </span>A[index, index]
 A3 &lt;-<span class="st"> </span><span class="kw">kinship</span>(all.ped$REG, all.ped$SIRE, all.ped$DAM)
 <span class="kw">dim</span>(A3)
 <span class="kw">table</span>(<span class="kw">colnames</span>(A3) ==<span class="st"> </span><span class="kw">rownames</span>(A3))</code></pre></div>
-<p>Again, let’s make sure that animals in the A matrix appear in the same order as that of the <code>ped</code> object. The <code>A4</code> object is now the reordered A matrix.</p>
+<p>Again, let’s make sure that animals in the A matrix appear in the same order as that of the <code>ped</code> object. The <code>A4</code> object is a reordered A matrix.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">index2 &lt;-<span class="st"> </span><span class="kw">match</span>(ped$REG, <span class="kw">rownames</span>(A3))
 A4 &lt;-<span class="st"> </span>A3[index2, index2]
 <span class="kw">dim</span>(A4)
