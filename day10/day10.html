@@ -117,7 +117,7 @@ $(document).ready(function () {
 <div id="main">
 <div id="overview" class="section level1">
 <h1>Overview</h1>
-<p>We will learn how to compute a repeatability and heritability using an analysis of variance (ANOVA) in R.</p>
+<p>We will learn how to compute repeatability and heritability using an analysis of variance (ANOVA) in R.</p>
 </div>
 <div id="reading-file" class="section level1">
 <h1>Reading file</h1>
@@ -127,12 +127,12 @@ $(document).ready(function () {
 </div>
 <div id="pre-adjustment-of-phenotypes" class="section level1">
 <h1>Pre-adjustment of phenotypes</h1>
-<p>We will calculate a repeatability by considering calf birth weights as repeated records on the sire. ANOVA we discussed in class is called one-way ANOVA, which assumes that there are no other factors or covariates influencing repeated records. This is not true for the beef cattle dataset because <code>SEX</code> and <code>AgeDam.mon.</code> are known to contribute to birth weights. Pre-correction of birth weights is therefore required before applying the ANOVA.</p>
+<p>We will calculate repeatability by considering calf birth weights as repeated records on the sire. The ANOVA discussed in class is called one-way ANOVA, which assumes that there are no other factors or covariates influencing repeated records. This is not true for the beef cattle dataset because <code>SEX</code> and <code>AgeDam.mon.</code> are known to contribute to birth weights. Pre-correction of birth weights is therefore required before applying the ANOVA.</p>
 <div id="adjustment-of-sex-effect" class="section level2">
 <h2>Adjustment of <code>SEX</code> effect</h2>
-<p>An approach we use to pre-correct the effect of <code>SEX</code> is to calculate the difference between means of bulls and cows and then add back the mean difference to cows’ birth weight records. The <code>table()</code> functions returns the number of bulls and cows.</p>
+<p>To pre-correct the effect of <code>SEX</code>, we will first calculate the difference between means of bulls and cows and then add back the mean difference to cows’ birth weight records. The <code>table()</code> function returns the number of bulls and cows.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(dat<span class="op">$</span>SEX)</code></pre></div>
-<p>Let’s first compute the mean of cow birth weights. We will first obtain a vector of indices. The <code>indexC</code> tells us which animals are cows.</p>
+<p>Let’s compute the mean of cow birth weights first. We will begin with obtaining a vector of indices. The <code>indexC</code> indicates which animals are cows.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">indexC &lt;-<span class="st"> </span><span class="kw">which</span>(dat<span class="op">$</span>SEX <span class="op">==</span><span class="st"> &quot;C&quot;</span>)
 <span class="kw">head</span>(indexC)
 <span class="kw">length</span>(indexC)
@@ -152,17 +152,17 @@ muC</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BWT_B &lt;-<span class="st"> </span>dat<span class="op">$</span>BWT[indexB]
 muB &lt;-<span class="st"> </span><span class="kw">mean</span>(BWT_B)
 muB</code></pre></div>
-<p>We can visualize the means and distributions of birth weights by using the boxplot.</p>
+<p>We can visualize the means and distributions of birth weights by using a boxplot.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(BWT_B, BWT_C, <span class="dt">names =</span> <span class="kw">c</span>(<span class="st">&quot;Bulls&quot;</span>, <span class="st">&quot;Cows&quot;</span>))</code></pre></div>
 <p>The mean difference between bull and cow birth weights is the difference between <code>muB</code> and <code>muC</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adj &lt;-<span class="st"> </span>muB <span class="op">-</span><span class="st"> </span>muC
 adj</code></pre></div>
-<p>We then copy the data frame <code>dat</code> to a new data frame <code>dat2</code> and add <code>adj</code> to cow birth weights.</p>
+<p>We then copy the data frame <code>dat</code> to a new data frame <code>dat2</code> and add <code>adj</code> to the cow birth weights.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat2 &lt;-<span class="st"> </span>dat
 dat2<span class="op">$</span>BWT[indexC] &lt;-<span class="st"> </span>dat2<span class="op">$</span>BWT[indexC] <span class="op">+</span><span class="st"> </span>adj</code></pre></div>
 <div id="exercise-1" class="section level3">
 <h3>Exercise 1</h3>
-<p>Check the means of birth weights for cows and bulls are the same in <code>dat2</code>.</p>
+<p>Check whether the means of birth weights for cows and bulls are the same in <code>dat2</code>.</p>
 </div>
 <div id="exercise-2" class="section level3">
 <h3>Exercise 2</h3>
@@ -171,7 +171,7 @@ dat2<span class="op">$</span>BWT[indexC] &lt;-<span class="st"> </span>dat2<span
 </div>
 <div id="adjustment-of-agedam.mon.-effect" class="section level2">
 <h2>Adjustment of <code>AgeDam.mon.</code> effect</h2>
-<p>We will account for the age of dam effect by restricting the data to 48 months and older. We use the <code>subset()</code> function to subset the <code>dat2</code> and create a new data frame <code>dat3</code>.</p>
+<p>We will account for the age of dam effect by restricting the data to 48 months and older. We will use the <code>subset()</code> function to subset the <code>dat2</code> and create a new data frame <code>dat3</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat3 &lt;-<span class="st"> </span><span class="kw">subset</span>(dat2, AgeDam.mon. <span class="op">&gt;=</span><span class="st"> </span><span class="dv">48</span>)
 <span class="kw">dim</span>(dat3)
 <span class="kw">table</span>(dat3<span class="op">$</span>SEX)
@@ -183,10 +183,10 @@ dat2<span class="op">$</span>BWT[indexC] &lt;-<span class="st"> </span>dat2<span
 <p>Let’s investigate how many records each sire has. The <code>table()</code> functions returns a frequency table and the <code>barplot()</code> function generates a barplot.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(dat3<span class="op">$</span>SIRE)
 <span class="kw">barplot</span>(<span class="kw">table</span>(dat3<span class="op">$</span>SIRE), <span class="dt">xlab =</span> <span class="st">&quot;Sire IDs&quot;</span>)</code></pre></div>
-<p>Now we count how many sires have only one record. Again we will use the <code>table()</code> and <code>barplot()</code> functions.</p>
+<p>Now we count the number of sires that has only one record. Again we will use the <code>table()</code> and <code>barplot()</code> functions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">table</span>(dat3<span class="op">$</span>SIRE))
 <span class="kw">barplot</span>(<span class="kw">table</span>(<span class="kw">table</span>(dat3<span class="op">$</span>SIRE)), <span class="dt">xlab =</span> <span class="st">&quot;Number of records&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Number of sires&quot;</span>)</code></pre></div>
-<p>We will remove sires with one record because they do not add any information. We will do this first by finding a vector of sire indices with the number of records greater or equal to two.</p>
+<p>We will remove the sires with one record because they do not add any information. We will do this first by finding a vector of sire indices with the number of records greater or equal to two.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">num.rec &lt;-<span class="st"> </span><span class="kw">table</span>(dat3<span class="op">$</span>SIRE)
 <span class="kw">head</span>(num.rec)
 <span class="kw">length</span>(num.rec)
