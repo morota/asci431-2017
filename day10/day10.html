@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Gota Morota" />
+
+<meta name="date" content="2017-02-09" />
+
+<title>Repeatability and Heritability</title>
+
+<script src="day10_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="day10_files/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+<script src="day10_files/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+<script src="day10_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="day10_files/magnific-popup-1.1.0/magnific-popup.css" rel="stylesheet" />
+<script src="day10_files/magnific-popup-1.1.0/jquery.magnific-popup.min.js"></script>
+<link href="day10_files/readthedown-0.1/readthedown.css" rel="stylesheet" />
+<script src="day10_files/readthedown-0.1/readthedown.js"></script>
+<script src="day10_files/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #ffffff; color: #1f1c1b; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #ffffff; color: #a0a0a0; border-right: 1px solid #a0a0a0; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #1f1c1b; background-color: #ffffff; }
+code > span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code > span.dt { color: #0057ae; } /* DataType */
+code > span.dv { color: #b08000; } /* DecVal */
+code > span.bn { color: #b08000; } /* BaseN */
+code > span.fl { color: #b08000; } /* Float */
+code > span.cn { color: #aa5500; } /* Constant */
+code > span.ch { color: #924c9d; } /* Char */
+code > span.sc { color: #3daee9; } /* SpecialChar */
+code > span.st { color: #bf0303; } /* String */
+code > span.vs { color: #bf0303; } /* VerbatimString */
+code > span.ss { color: #ff5500; } /* SpecialString */
+code > span.im { color: #ff5500; } /* Import */
+code > span.co { color: #898887; } /* Comment */
+code > span.do { color: #607880; } /* Documentation */
+code > span.an { color: #ca60ca; } /* Annotation */
+code > span.cv { color: #0095ff; } /* CommentVar */
+code > span.ot { color: #006e28; } /* Other */
+code > span.fu { color: #644a9b; } /* Function */
+code > span.va { color: #0057ae; } /* Variable */
+code > span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #1f1c1b; } /* Operator */
+code > span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code > span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code > span.pp { color: #006e28; } /* Preprocessor */
+code > span.at { color: #0057ae; } /* Attribute */
+code > span.re { color: #0057ae; } /* RegionMarker */
+code > span.in { color: #b08000; } /* Information */
+code > span.wa { color: #bf0303; } /* Warning */
+code > span.al { color: #bf0303; font-weight: bold; } /* Alert */
+code > span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code > span. { color: #1f1c1b; } /* Normal */
+</style>
+
+
+</head>
+
+<body>
+
+
+<div id="content" data-toggle="wy-nav-shift">
+
+<!-- tabsets -->
+<script src="/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+<nav id="nav-top" role="navigation" aria-label="top navigation">
+    <a role="button" href="#" data-toggle="wy-nav-top"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+</nav>
+
+
+<div id="header">
+<h1 class="title">Repeatability and Heritability</h1>
+</div>
+
+
+<div id="table-of-contents">
+    <h2><a href="#content">Repeatability and Heritability</a></h2>
+    <div id="text-table-of-contents">
+      <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#reading-file">Reading file</a></li>
+      <li><a href="#pre-adjustment-of-phenotypes">Pre-adjustment of phenotypes</a><ul>
+      <li><a href="#adjustment-of-sex-effect">Adjustment of <code>SEX</code> effect</a></li>
+      <li><a href="#adjustment-of-agedam.mon.-effect">Adjustment of <code>AgeDam.mon.</code> effect</a></li>
+      </ul></li>
+      <li><a href="#number-of-records-per-sire">Number of records per sire</a></li>
+      <li><a href="#unbalanced-data">Unbalanced data</a></li>
+      <li><a href="#anova">ANOVA</a></li>
+      <li><a href="#references">References</a></li>
+      </ul>
+    </div>
+</div>
+
+<div id="main">
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>We will learn how to compute a repeatability and heritability using an analysis of variance (ANOVA) in R.</p>
+</div>
+<div id="reading-file" class="section level1">
+<h1>Reading file</h1>
+<p>Use the function <code>read.table</code> to read the phenotype file (1000withEffects.redangus) in a data frame format.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="kw">file.choose</span>(), <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+<span class="kw">head</span>(dat)</code></pre></div>
+</div>
+<div id="pre-adjustment-of-phenotypes" class="section level1">
+<h1>Pre-adjustment of phenotypes</h1>
+<p>We will calculate a repeatability by considering calf birth weights as repeated records on the sire. ANOVA we discussed in class is called one-way ANOVA, which assumes that there are no other factors or covariates influencing repeated records. This is not true for the beef cattle dataset because <code>SEX</code> and <code>AgeDam.mon.</code> are known to contribute to birth weights. Pre-correction of birth weights is therefore required before applying the ANOVA.</p>
+<div id="adjustment-of-sex-effect" class="section level2">
+<h2>Adjustment of <code>SEX</code> effect</h2>
+<p>An approach we use to pre-correct the effect of <code>SEX</code> is to calculate the difference between means of bulls and cows and then add back the mean difference to cows’ birth weight records. The <code>table()</code> functions returns the number of bulls and cows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(dat<span class="op">$</span>SEX)</code></pre></div>
+<p>Let’s first compute the mean of cow birth weights. We will first obtain a vector of indices. The <code>indexC</code> tells us which animals are cows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">indexC &lt;-<span class="st"> </span><span class="kw">which</span>(dat<span class="op">$</span>SEX <span class="op">==</span><span class="st"> &quot;C&quot;</span>)
+<span class="kw">head</span>(indexC)
+<span class="kw">length</span>(indexC)
+<span class="kw">table</span>(dat[indexC, <span class="st">&quot;SEX&quot;</span>])</code></pre></div>
+<p>We use the vector of indices <code>indexC</code> to compute the mean of cow birth weights.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BWT_C &lt;-<span class="st"> </span>dat<span class="op">$</span>BWT[indexC]
+muC &lt;-<span class="st"> </span><span class="kw">mean</span>(BWT_C)
+muC</code></pre></div>
+<p>We apply the same code for bulls. The <code>indexB</code> tells us which animals are bulls.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">indexB &lt;-<span class="st"> </span><span class="kw">which</span>(dat<span class="op">$</span>SEX <span class="op">!=</span><span class="st"> &quot;C&quot;</span>)
+<span class="kw">head</span>(indexB)
+<span class="kw">length</span>(indexB)
+<span class="kw">table</span>(dat[indexB, <span class="st">&quot;SEX&quot;</span>])</code></pre></div>
+<p>Because we have 1000 animals in total, the sum of length of <code>indexC</code> and length of <code>indexB</code> is 1000.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(indexC) <span class="op">+</span><span class="st"> </span><span class="kw">length</span>(indexB)</code></pre></div>
+<p>Similarly, we use the vector of indices <code>indexB</code> to compute the mean of bull birth weights.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BWT_B &lt;-<span class="st"> </span>dat<span class="op">$</span>BWT[indexB]
+muB &lt;-<span class="st"> </span><span class="kw">mean</span>(BWT_B)
+muB</code></pre></div>
+<p>We can visualize the means and distributions of birth weights by using the boxplot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(BWT_B, BWT_C, <span class="dt">names =</span> <span class="kw">c</span>(<span class="st">&quot;Bulls&quot;</span>, <span class="st">&quot;Cows&quot;</span>))</code></pre></div>
+<p>The mean difference between bull and cow birth weights is the difference between <code>muB</code> and <code>muC</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adj &lt;-<span class="st"> </span>muB <span class="op">-</span><span class="st"> </span>muC
+adj</code></pre></div>
+<p>We then copy the data frame <code>dat</code> to a new data frame <code>dat2</code> and add <code>adj</code> to cow birth weights.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat2 &lt;-<span class="st"> </span>dat
+dat2<span class="op">$</span>BWT[indexC] &lt;-<span class="st"> </span>dat2<span class="op">$</span>BWT[indexC] <span class="op">+</span><span class="st"> </span>adj</code></pre></div>
+<div id="exercise-1" class="section level3">
+<h3>Exercise 1</h3>
+<p>Check the means of birth weights for cows and bulls are the same in <code>dat2</code>.</p>
+</div>
+<div id="exercise-2" class="section level3">
+<h3>Exercise 2</h3>
+<p>Plot a boxplot of cow and bull birth weights in <code>dat2</code>.</p>
+</div>
+</div>
+<div id="adjustment-of-agedam.mon.-effect" class="section level2">
+<h2>Adjustment of <code>AgeDam.mon.</code> effect</h2>
+<p>We will account for the age of dam effect by restricting the data to 48 months and older. We use the <code>subset()</code> function to subset the <code>dat2</code> and create a new data frame <code>dat3</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat3 &lt;-<span class="st"> </span><span class="kw">subset</span>(dat2, AgeDam.mon. <span class="op">&gt;=</span><span class="st"> </span><span class="dv">48</span>)
+<span class="kw">dim</span>(dat3)
+<span class="kw">table</span>(dat3<span class="op">$</span>SEX)
+<span class="kw">table</span>(dat3<span class="op">$</span>AgeDam.mon.)</code></pre></div>
+</div>
+</div>
+<div id="number-of-records-per-sire" class="section level1">
+<h1>Number of records per sire</h1>
+<p>Let’s investigate how many records each sire has. The <code>table()</code> functions returns a frequency table and the <code>barplot()</code> function generates a barplot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(dat3<span class="op">$</span>SIRE)
+<span class="kw">barplot</span>(<span class="kw">table</span>(dat3<span class="op">$</span>SIRE), <span class="dt">xlab =</span> <span class="st">&quot;Sire IDs&quot;</span>)</code></pre></div>
+<p>Now we count how many sires have only one record. Again we will use the <code>table()</code> and <code>barplot()</code> functions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">table</span>(dat3<span class="op">$</span>SIRE))
+<span class="kw">barplot</span>(<span class="kw">table</span>(<span class="kw">table</span>(dat3<span class="op">$</span>SIRE)), <span class="dt">xlab =</span> <span class="st">&quot;Number of records&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Number of sires&quot;</span>)</code></pre></div>
+<p>We will remove sires with one record because they do not add any information. We will do this first by finding a vector of sire indices with the number of records greater or equal to two.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">num.rec &lt;-<span class="st"> </span><span class="kw">table</span>(dat3<span class="op">$</span>SIRE)
+<span class="kw">head</span>(num.rec)
+<span class="kw">length</span>(num.rec)
+
+index3 &lt;-<span class="st"> </span><span class="kw">which</span>(num.rec <span class="op">!=</span><span class="st"> </span><span class="dv">1</span>)
+<span class="kw">head</span>(index3)
+<span class="kw">length</span>(index3)</code></pre></div>
+<div id="exercise-3" class="section level3">
+<h3>Exercise 3</h3>
+<p>Show that the difference between the lengths of <code>num.rec</code> and <code>index3</code> is equal to the number of sires with only one record.</p>
+<p>We will now use the vector <code>index3</code> to find sires with the number of records greater or equal to two. The <code>sire</code> object contains IDs of those sires.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sire &lt;-<span class="st"> </span><span class="kw">names</span>(num.rec[index3])
+<span class="kw">head</span>(sire)</code></pre></div>
+<p>Then we only select records provided by those sires by using the <code>%in%</code> operator. We will use the data frame <code>dat4</code> to compute repeatability and heritability.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">index4 &lt;-<span class="st"> </span>dat3<span class="op">$</span>SIRE <span class="op">%in%</span><span class="st"> </span>sire
+<span class="kw">head</span>(index4)
+dat4 &lt;-<span class="st"> </span>dat3[index4, ]
+<span class="kw">dim</span>(dat4)</code></pre></div>
+</div>
+</div>
+<div id="unbalanced-data" class="section level1">
+<h1>Unbalanced data</h1>
+<p>The ANOVA we discussed in class is called balanced ANOVA because the number of records per turkey was fixed with <code>n</code> = 10. Unlike such an experimental design, data from observatinal studies are hihgly unbalanced as in the case of our beef cattle dataset. Because the number of records per sire varies, we will calculate an adjusted <code>n</code> or <code>k1</code> according to Becker (1975). This is given by <span class="math display">\[
+\begin{align*}
+k_1 &amp;= \frac{1}{s} \times (N - \frac{\sum_{i}^{s}n_i^2}{N})
+\end{align*},
+\]</span> where <span class="math inline">\(s\)</span> is the number of sires, <span class="math inline">\(N\)</span> is the total number of observations, and <span class="math inline">\(n_i\)</span> is the number of records from <span class="math inline">\(i\)</span>th sire. The following R code computes <span class="math inline">\(s\)</span>, <span class="math inline">\(N\)</span>, and <span class="math inline">\(\sum_{i}^{s}n_i^2\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N &lt;-<span class="st"> </span><span class="kw">nrow</span>(dat4)
+N
+s &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">table</span>(dat4<span class="op">$</span>SIRE))
+s
+ni2_sum &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">table</span>(<span class="kw">table</span>(dat4<span class="op">$</span>SIRE))<span class="op">^</span><span class="dv">2</span>)
+ni2_sum</code></pre></div>
+<div id="exercise-4" class="section level3">
+<h3>Exercise 4</h3>
+<p>Compute <code>k1</code> which is the adjusted number of records per sire.</p>
+</div>
+<div id="exercise-5" class="section level3">
+<h3>Exercise 5</h3>
+<p>Compare <code>k1</code> with the mean of number of records per sire.</p>
+</div>
+</div>
+<div id="anova" class="section level1">
+<h1>ANOVA</h1>
+<p>We will fit the ANOVA to the beef cattle dataset. The <code>aov()</code> function performs ANOVA. This function takes two arguments: a vector of observations and a vector of group variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">`</span><span class="dt">?</span><span class="st">`</span>(aov)
+my.aov &lt;-<span class="st"> </span><span class="kw">aov</span>(dat4<span class="op">$</span>BWT <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(dat4<span class="op">$</span>SIRE))
+my.aov</code></pre></div>
+<p>The <code>summary()</code> functions returns an ANOVA table.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">aov.summary &lt;-<span class="st"> </span><span class="kw">summary</span>(my.aov)
+aov.summary</code></pre></div>
+<p>Because the object <code>aov.summary</code> is a list, we can use the double square brackets followed by the single square brackets to access each number in the ANOVA table.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(aov.summary)
+aov.summary[[<span class="dv">1</span>]]
+MSB &lt;-<span class="st"> </span>aov.summary[[<span class="dv">1</span>]][<span class="dv">1</span>, <span class="dv">3</span>]
+MSB
+MSW &lt;-<span class="st"> </span>aov.summary[[<span class="dv">1</span>]][<span class="dv">2</span>, <span class="dv">3</span>]
+MSW</code></pre></div>
+<div id="exercise-6" class="section level3">
+<h3>Exercise 6</h3>
+<p>Recall that repeatability is the corrleation between repeated records on an individual. This is given by <span class="math display">\[
+\begin{align*}
+r &amp;= \frac{V(B)}{V(B) + V(W)}
+\end{align*},
+\]</span> where <span class="math inline">\(V(B) = \frac{MS_B - MS_W}{k_1}\)</span> and <span class="math inline">\(V(W) = MS_W\)</span>. We can now compute repeatability while controlling for <code>SEX</code> and <code>AgeDam.mon</code>. Report the estimate of repeatability.</p>
+</div>
+<div id="exercise-7" class="section level3">
+<h3>Exercise 7</h3>
+<p>Recall that the heritability is the percentage of phenotypic difference in the parent observed in the offspring. Report the estimate of heritability using a sire model.</p>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<ul>
+<li>Becker WA. Manual of Quantitative Genetics. 1975. Program in Genetic, Washington State University, Pullman, Washington. [<a href="https://www.amazon.com/Manual-quantitative-genetics-Walter-Becker/dp/0931399009">Amazon</a>] [<a href="http://onlinelibrary.wiley.com/wol1/doi/10.1111/j.1439-037X.1986.tb00069.x/abstract">Book review</a>]</li>
+</ul>
+</div>
+</div>
+
+
+</div>
+
+<div id="postamble" data-toggle="wy-nav-shift" class="status">
+<p class="author"><span class="glyphicon glyphicon-user"></span> Gota Morota</p>
+<p class="date"><span class="glyphicon glyphicon-calendar"></span> February 09, 2017</p>
+</div>
+
+
+<script>
+$(document).ready(function () {
+ 	  });
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
