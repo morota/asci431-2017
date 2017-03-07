@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Gota Morota" />
+
+
+<title>Ordinary least squares and BLUE</title>
+
+<script src="day17_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="day17_files/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+<script src="day17_files/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+<script src="day17_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="day17_files/magnific-popup-1.1.0/magnific-popup.css" rel="stylesheet" />
+<script src="day17_files/magnific-popup-1.1.0/jquery.magnific-popup.min.js"></script>
+<link href="day17_files/readthedown-0.1/readthedown.css" rel="stylesheet" />
+<script src="day17_files/readthedown-0.1/readthedown.js"></script>
+<script src="day17_files/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #dddddd; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { font-weight: bold; } /* Keyword */
+code > span.dt { color: #800000; } /* DataType */
+code > span.dv { color: #0000ff; } /* DecVal */
+code > span.bn { color: #0000ff; } /* BaseN */
+code > span.fl { color: #800080; } /* Float */
+code > span.ch { color: #ff00ff; } /* Char */
+code > span.st { color: #dd0000; } /* String */
+code > span.co { color: #808080; font-style: italic; } /* Comment */
+code > span.al { color: #00ff00; font-weight: bold; } /* Alert */
+code > span.fu { color: #000080; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #ff0000; font-weight: bold; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #ff00ff; } /* SpecialChar */
+code > span.vs { color: #dd0000; } /* VerbatimString */
+code > span.ss { color: #dd0000; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { font-weight: bold; } /* Preprocessor */
+code > span.at { } /* Attribute */
+code > span.do { color: #808080; font-style: italic; } /* Documentation */
+code > span.an { color: #808080; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #808080; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #808080; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+</head>
+
+<body>
+
+
+<div id="content" data-toggle="wy-nav-shift">
+
+<!-- tabsets -->
+<script src="/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+<nav id="nav-top" role="navigation" aria-label="top navigation">
+    <a role="button" href="#" data-toggle="wy-nav-top"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+</nav>
+
+
+<div id="header">
+<h1 class="title">Ordinary least squares and BLUE</h1>
+</div>
+
+
+<div id="table-of-contents">
+    <h2><a href="#content">Ordinary least squares and BLUE</a></h2>
+    <div id="text-table-of-contents">
+      <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#read-file">Read file</a></li>
+      <li><a href="#phenotypes">Phenotypes</a></li>
+      <li><a href="#systematic-effects">Systematic effects</a><ul>
+      <li><a href="#age-of-dams">Age of dams</a></li>
+      <li><a href="#sex">Sex</a></li>
+      <li><a href="#birth-weights-and-age-of-dams">Birth weights and age of dams</a></li>
+      <li><a href="#birth-weights-and-sex">Birth weights and sex</a></li>
+      </ul></li>
+      <li><a href="#ordinary-least-squares">Ordinary least squares</a></li>
+      </ul>
+    </div>
+</div>
+
+<div id="main">
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>We will learn how to connect phenotypes and systematic effects (fixed effects) using ordinary least squares (OLS).</p>
+</div>
+<div id="read-file" class="section level1">
+<h1>Read file</h1>
+<p>Use the function <code>read.table()</code> to read the phenotype file (1000withEffects.redangus).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="kw">file.choose</span>(), <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+<span class="kw">dim</span>(dat)</code></pre></div>
+</div>
+<div id="phenotypes" class="section level1">
+<h1>Phenotypes</h1>
+<p>The <code>hist()</code> functions plot a histogram.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(dat$BWT, <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Histogram&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Birth weights&quot;</span>)</code></pre></div>
+<p>The argument <code>prob=TRUE</code> returns a probability on the y axis. We use the <code>lines()</code> function to add a density estimate along with the histogram.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(dat$BWT, <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Histogram&quot;</span>, <span class="dt">prob =</span> <span class="ot">TRUE</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, 
+    <span class="fl">0.04</span>), <span class="dt">xlab =</span> <span class="st">&quot;Birth weights&quot;</span>)
+<span class="kw">lines</span>(<span class="kw">density</span>(dat$BWT), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
+<div id="exercise-1" class="section level3">
+<h3>Exercise 1</h3>
+<p>What are the mean, median, standard deviation, maximum, and minimum of birth weights?</p>
+</div>
+</div>
+<div id="systematic-effects" class="section level1">
+<h1>Systematic effects</h1>
+<p>We will estimate the effects of age of dams and sex on birth weights. Let’s first check the distributions of those systematic effects.</p>
+<div id="age-of-dams" class="section level2">
+<h2>Age of dams</h2>
+<p>The <code>hist()</code> functions plot a histogram.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(dat$AgeDam.mon., <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Histogram&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Age of dams&quot;</span>)</code></pre></div>
+<p>Below is a histogram with the argumment <code>prob=TRUE</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(dat$AgeDam.mon., <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Histogram&quot;</span>, <span class="dt">prob =</span> <span class="ot">TRUE</span>, <span class="dt">xlab =</span> <span class="st">&quot;Age of dams&quot;</span>)
+<span class="kw">lines</span>(<span class="kw">density</span>(dat$AgeDam.mon), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
+<div id="exercise-2" class="section level3">
+<h3>Exercise 2</h3>
+<p>What are the mean, median, standard deviation, maximum, and minimum of age of dams?</p>
+</div>
+</div>
+<div id="sex" class="section level2">
+<h2>Sex</h2>
+<p>The <code>barplot()</code> function generates a barplot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(<span class="kw">table</span>(dat$SEX), <span class="dt">main =</span> <span class="st">&quot;Distribution&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Frequency&quot;</span>, <span class="dt">names.arg =</span> <span class="kw">c</span>(<span class="st">&quot;Bulls&quot;</span>, 
+    <span class="st">&quot;Cows&quot;</span>, <span class="st">&quot;Steers&quot;</span>), <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>)</code></pre></div>
+<p>Because there is only one steer we treat him as a bull.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(dat$SEX)
+dat$SEX[dat$SEX ==<span class="st"> &quot;S&quot;</span>] &lt;-<span class="st"> &quot;B&quot;</span>
+<span class="kw">table</span>(dat$SEX)</code></pre></div>
+</div>
+<div id="birth-weights-and-age-of-dams" class="section level2">
+<h2>Birth weights and age of dams</h2>
+<p>Here we visualize the relationship between age of dams and birth weights.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(dat$AgeDam.mon., dat$BWT, <span class="dt">xlab =</span> <span class="st">&quot;BWT&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Age of dams&quot;</span>)
+<span class="kw">abline</span>(<span class="kw">lm</span>(dat$AgeDam.mon. ~<span class="st"> </span>dat$BWT), <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
+<span class="kw">lines</span>(<span class="kw">lowess</span>(dat$AgeDam.mon., dat$BWT), <span class="dt">lwd =</span> <span class="dv">4</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</code></pre></div>
+<div id="exercise-3" class="section level3">
+<h3>Exercise 3</h3>
+<p>What is the correlation between age of dams and birth weights?</p>
+</div>
+</div>
+<div id="birth-weights-and-sex" class="section level2">
+<h2>Birth weights and sex</h2>
+<p>The <code>boxplot()</code> function generates distributions of birth weights for bulls and cows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(dat$BWT[dat$SEX ==<span class="st"> &quot;B&quot;</span>], dat$BWT[dat$SEX ==<span class="st"> &quot;C&quot;</span>], <span class="dt">names =</span> <span class="kw">c</span>(<span class="st">&quot;Bulls&quot;</span>, 
+    <span class="st">&quot;Cows&quot;</span>), <span class="dt">ylab =</span> <span class="st">&quot;Birth weights&quot;</span>)</code></pre></div>
+<div id="exercise-4" class="section level3">
+<h3>Exercise 4</h3>
+<p>What is the mean difference between birth weights of bulls and dams?</p>
+</div>
+</div>
+</div>
+<div id="ordinary-least-squares" class="section level1">
+<h1>Ordinary least squares</h1>
+<p>We will use the <code>lm()</code> function to fit OLS. This function offers an intuitive formula syntax. The <code>summary()</code> function summarizes a model fit.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(BWT ~<span class="st"> </span>AgeDam.mon. +<span class="st"> </span><span class="kw">factor</span>(SEX), <span class="dt">data =</span> dat)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<div id="exercise-5" class="section level3">
+<h3>Exercise 5</h3>
+<p>Comfirm the estimates of p-value from t-statistics by using the <code>pt</code> function. The <code>pt()</code> function gives the probability density function.</p>
+</div>
+<div id="exercise-6" class="section level3">
+<h3>Exercise 6</h3>
+<p>Explain why degrees of freedom is 997.</p>
+</div>
+<div id="exercise-7" class="section level3">
+<h3>Exercise 7</h3>
+<p>Comfirm the residual standard error by using the <code>predict()</code> function. This function returns <span class="math inline">\(\hat{\mathbf{y}}\)</span>. Note that the residual standard error is given by <span class="math display">\[
+\begin{align*}
+\hat{\sigma}^2_e &amp;= \frac{\sum_{i=1}^{n} (y_i - \sum_{j=1}^{m} x_{ij}\hat{b}_{j}) }{n - k - 1} \\
+&amp;= \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i) }{n - k - 1}. \\
+\end{align*}
+\]</span></p>
+</div>
+<div id="exercise-8" class="section level3">
+<h3>Exercise 8</h3>
+<p>Compute the multiple R-squared (<span class="math inline">\(R^2\)</span>) by yourself. The multiple R-squared indicates the proportion of explained variance. It is given by the squared correlation between the observed and predicted values. <span class="math display">\[
+R^2 = cor(\mathbf{y}, \hat{\mathbf{y}})^2
+\]</span></p>
+</div>
+<div id="exercise-9" class="section level3">
+<h3>Exercise 9</h3>
+<p>Compute the adjusted multiple R-squared by yourself. The adjusted multiple R-squared is given by <span class="math display">\[
+R^2_{adj} = 1 - (1 - R^2) \left(\frac{n-1}{n - k - 1} \right).
+\]</span></p>
+</div>
+</div>
+</div>
+
+
+</div>
+
+<div id="postamble" data-toggle="wy-nav-shift" class="status">
+<p class="author"><span class="glyphicon glyphicon-user"></span> Gota Morota</p>
+<p class="date"><span class="glyphicon glyphicon-calendar"></span> March 8, 2017</p>
+</div>
+
+
+<script>
+$(document).ready(function () {
+ 	  });
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
