@@ -208,8 +208,8 @@ dat<span class="op">$</span>SEX[dat<span class="op">$</span>SEX <span class="op"
 <h3>Exercise 7</h3>
 <p>Comfirm the residual standard error by using the <code>predict()</code> function. This function returns <span class="math inline">\(\hat{\mathbf{y}}\)</span>. Note that the residual standard error is given by <span class="math display">\[
 \begin{align*}
-\hat{\sigma}^2_e &amp;= \frac{\sum_{i=1}^{n} (y_i - \sum_{j=1}^{m} x_{ij}\hat{b}_{j}) }{n - k - 1} \\
-&amp;= \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i) }{n - k - 1}. \\
+\hat{\sigma}^2_e &amp;= \frac{\sum_{i=1}^{n} (y_i - \sum_{j=1}^{m} x_{ij}\hat{b}_{j})^2 }{n - k - 1} \\
+&amp;= \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 }{n - k - 1}. \\
 \end{align*}
 \]</span></p>
 </div>
