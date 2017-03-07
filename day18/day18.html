@@ -100,7 +100,7 @@ $(document).ready(function () {
     <div id="text-table-of-contents">
       <ul>
       <li><a href="#overview">Overview</a></li>
-      <li><a href="#load-file">Load file</a></li>
+      <li><a href="#load-r-objects">Load R objects</a></li>
       <li><a href="#statistical-model">Statistical model</a></li>
       <li><a href="#incidence-matrix-x">Incidence matrix X</a></li>
       <li><a href="#incidence-matrix-z">Incidence matrix Z</a></li>
@@ -119,8 +119,8 @@ $(document).ready(function () {
 <h1>Overview</h1>
 <p>We will learn how to connect phenotypes and pedigree using pedigree-based best linear unbiased prediction (PBLUP).</p>
 </div>
-<div id="load-file" class="section level1">
-<h1>Load file</h1>
+<div id="load-r-objects" class="section level1">
+<h1>Load R objects</h1>
 <p>Use the function <code>load()</code> to load the phenotype file (<code>dat_day17.Rda</code>) and the numerator relationship matrix (<code>A2.Rda</code>) we created in class (<a href="http://morotalab.org/asci431-2017/day17/day17.html">link1</a> and <a href="http://morotalab.org/asci431-2017/day07/day07.html">link2</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="kw">file.choose</span>())  <span class="co"># dat_day17.Rda</span>
 <span class="kw">dim</span>(dat)
