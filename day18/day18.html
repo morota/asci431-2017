@@ -121,9 +121,11 @@ $(document).ready(function () {
 </div>
 <div id="load-r-objects" class="section level1">
 <h1>Load R objects</h1>
-<p>Use the function <code>load()</code> to load the phenotype file (<code>dat_day17.Rda</code>) and the numerator relationship matrix (<code>A2.Rda</code>) we created in class (<a href="http://morotalab.org/asci431-2017/day17/day17.html">link1</a> and <a href="http://morotalab.org/asci431-2017/day07/day07.html">link2</a>).</p>
+<p>Use the function <code>load()</code> to load the phenotype object (<code>dat_day17.Rda</code>), the OLS fit object (<code>fit_day17.Rda</code>), and the numerator relationship matrix (<code>A2.Rda</code>) we created in class (<a href="http://morotalab.org/asci431-2017/day17/day17.html">link1</a> and <a href="http://morotalab.org/asci431-2017/day07/day07.html">link2</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="kw">file.choose</span>())  <span class="co"># dat_day17.Rda</span>
 <span class="kw">dim</span>(dat)
+<span class="kw">load</span>(<span class="kw">file.choose</span>())  <span class="co"># fit_day17.Rda</span>
+<span class="kw">summary</span>(fit)
 <span class="kw">load</span>(<span class="kw">file.choose</span>())  <span class="co"># A2.Rda</span>
 <span class="kw">dim</span>(A2)</code></pre></div>
 </div>
