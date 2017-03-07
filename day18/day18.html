@@ -18,11 +18,12 @@
 <link href="day18_files/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 <script src="day18_files/bootstrap-3.3.6/js/bootstrap.min.js"></script>
 <script src="day18_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="day18_files/navigation-1.1/tabsets.js"></script>
+<script src="day18_files/navigation-1.1/codefolding.js"></script>
 <link href="day18_files/magnific-popup-1.1.0/magnific-popup.css" rel="stylesheet" />
 <script src="day18_files/magnific-popup-1.1.0/jquery.magnific-popup.min.js"></script>
 <link href="day18_files/readthedown-0.1/readthedown.css" rel="stylesheet" />
 <script src="day18_files/readthedown-0.1/readthedown.js"></script>
-<script src="day18_files/navigation-1.1/tabsets.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -30,37 +31,41 @@
 div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #dddddd; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #ffffff; color: #1f1c1b; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #ffffff; color: #a0a0a0; border-right: 1px solid #a0a0a0; }
 td.sourceCode { padding-left: 5px; }
-code > span.kw { font-weight: bold; } /* Keyword */
-code > span.dt { color: #800000; } /* DataType */
-code > span.dv { color: #0000ff; } /* DecVal */
-code > span.bn { color: #0000ff; } /* BaseN */
-code > span.fl { color: #800080; } /* Float */
-code > span.ch { color: #ff00ff; } /* Char */
-code > span.st { color: #dd0000; } /* String */
-code > span.co { color: #808080; font-style: italic; } /* Comment */
-code > span.al { color: #00ff00; font-weight: bold; } /* Alert */
-code > span.fu { color: #000080; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #ff0000; font-weight: bold; } /* Warning */
-code > span.cn { color: #000000; } /* Constant */
-code > span.sc { color: #ff00ff; } /* SpecialChar */
-code > span.vs { color: #dd0000; } /* VerbatimString */
-code > span.ss { color: #dd0000; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { } /* Variable */
-code > span.cf { } /* ControlFlow */
-code > span.op { } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { font-weight: bold; } /* Preprocessor */
-code > span.at { } /* Attribute */
-code > span.do { color: #808080; font-style: italic; } /* Documentation */
-code > span.an { color: #808080; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #808080; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #808080; font-weight: bold; font-style: italic; } /* Information */
+pre, code { color: #1f1c1b; background-color: #ffffff; }
+code > span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code > span.dt { color: #0057ae; } /* DataType */
+code > span.dv { color: #b08000; } /* DecVal */
+code > span.bn { color: #b08000; } /* BaseN */
+code > span.fl { color: #b08000; } /* Float */
+code > span.cn { color: #aa5500; } /* Constant */
+code > span.ch { color: #924c9d; } /* Char */
+code > span.sc { color: #3daee9; } /* SpecialChar */
+code > span.st { color: #bf0303; } /* String */
+code > span.vs { color: #bf0303; } /* VerbatimString */
+code > span.ss { color: #ff5500; } /* SpecialString */
+code > span.im { color: #ff5500; } /* Import */
+code > span.co { color: #898887; } /* Comment */
+code > span.do { color: #607880; } /* Documentation */
+code > span.an { color: #ca60ca; } /* Annotation */
+code > span.cv { color: #0095ff; } /* CommentVar */
+code > span.ot { color: #006e28; } /* Other */
+code > span.fu { color: #644a9b; } /* Function */
+code > span.va { color: #0057ae; } /* Variable */
+code > span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #1f1c1b; } /* Operator */
+code > span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code > span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code > span.pp { color: #006e28; } /* Preprocessor */
+code > span.at { color: #0057ae; } /* Attribute */
+code > span.re { color: #0057ae; } /* RegionMarker */
+code > span.in { color: #b08000; } /* Information */
+code > span.wa { color: #bf0303; } /* Warning */
+code > span.al { color: #bf0303; font-weight: bold; } /* Alert */
+code > span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code > span. { color: #1f1c1b; } /* Normal */
 </style>
 
 
@@ -72,7 +77,6 @@ code > span.in { color: #808080; font-weight: bold; font-style: italic; } /* Inf
 <div id="content" data-toggle="wy-nav-shift">
 
 <!-- tabsets -->
-<script src="/tabsets.js"></script>
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
@@ -147,9 +151,9 @@ BLUP(\mathbf{u} | \mathbf{y}) &amp;= Cov(\mathbf{u}, \mathbf{y}) Var(\mathbf{y})
 </div>
 <div id="incidence-matrix-x" class="section level1">
 <h1>Incidence matrix X</h1>
-<p>We will now contruct each component one by one. First we will create the incidence matrix <span class="math inline">\(\mathbf{X}\)</span>. We first subset the variable <code>dat</code> by age of dams and sex, and create a new variable <code>dat2</code>. The <code>model.matrix()</code> function returns the incidence matrix <span class="math inline">\(X\)</span>.</p>
+<p>We will now contruct each component one by one. First we will create the incidence matrix <span class="math inline">\(\mathbf{X}\)</span>. We first subset the variable <code>dat</code> by age of dams and sex of calves, and create a new variable <code>dat2</code>. The <code>model.matrix()</code> function returns the incidence matrix <span class="math inline">\(X\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat2 &lt;-<span class="st"> </span>dat[, <span class="kw">c</span>(<span class="st">&quot;AgeDam.mon.&quot;</span>, <span class="st">&quot;SEX&quot;</span>)]
-X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~dat2$AgeDam.mon. +<span class="st"> </span>dat2$SEX)
+X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>dat2<span class="op">$</span>AgeDam.mon. <span class="op">+</span><span class="st"> </span>dat2<span class="op">$</span>SEX)
 <span class="kw">dim</span>(X)
 <span class="kw">head</span>(X)</code></pre></div>
 </div>
@@ -174,21 +178,21 @@ X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~dat2$AgeDa
 <span class="kw">library</span>(varComp)
 <span class="st">`</span><span class="dt">?</span><span class="st">`</span>(varComp)
 
-y &lt;-<span class="st"> </span>dat$BWT
-varcomp &lt;-<span class="st"> </span><span class="kw">varComp</span>(<span class="dt">fixed =</span> y ~<span class="st"> </span>X, <span class="dt">random =</span> ~Z, <span class="dt">varcov =</span> A2)
-sigma2A &lt;-<span class="st"> </span>varcomp$varComps  <span class="co"># additive genetic variance</span>
+y &lt;-<span class="st"> </span>dat<span class="op">$</span>BWT
+varcomp &lt;-<span class="st"> </span><span class="kw">varComp</span>(<span class="dt">fixed =</span> y <span class="op">~</span><span class="st"> </span>X, <span class="dt">random =</span> <span class="op">~</span>Z, <span class="dt">varcov =</span> A2)
+sigma2A &lt;-<span class="st"> </span>varcomp<span class="op">$</span>varComps  <span class="co"># additive genetic variance</span>
 sigma2A
-sigma2e &lt;-<span class="st"> </span>varcomp$sigma2  <span class="co"># residual variance </span>
+sigma2e &lt;-<span class="st"> </span>varcomp<span class="op">$</span>sigma2  <span class="co"># residual variance </span>
 sigma2e</code></pre></div>
 <div id="exercise-1" class="section level3">
 <h3>Exercise 1</h3>
-<p>What is the estimate of heritability? Compare the estimate with the one we obtained from <a href="http://morotalab.org/asci431-2017/day10/day10.html">intraclass correlation</a> using a sire model.</p>
+<p>What is the estimate of heritability? Compare the estimate with the one we obtained from <a href="http://morotalab.org/asci431-2017/day10/day10.html">intraclass correlation</a> using the sire model.</p>
 </div>
 </div>
 <div id="inverse-of-v" class="section level1">
 <h1>Inverse of V</h1>
 <p>Here we compute the inverse of <span class="math inline">\(V\)</span> matrix. We will use 1) the multiplication operator <code>%*%</code> and 2) the function <code>solve()</code> to obtain a inverse of matrix.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">V &lt;-<span class="st"> </span>Z %*%<span class="st"> </span>A2 %*%<span class="st"> </span><span class="kw">t</span>(Z) *<span class="st"> </span>sigma2A +<span class="st"> </span>I *<span class="st"> </span>sigma2e
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">V &lt;-<span class="st"> </span>Z <span class="op">%*%</span><span class="st"> </span>A2 <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">*</span><span class="st"> </span>sigma2A <span class="op">+</span><span class="st"> </span>I <span class="op">*</span><span class="st"> </span>sigma2e
 <span class="kw">dim</span>(V)
 Vinv &lt;-<span class="st"> </span><span class="kw">solve</span>(V)
 <span class="kw">dim</span>(Vinv)</code></pre></div>
@@ -196,16 +200,16 @@ Vinv &lt;-<span class="st"> </span><span class="kw">solve</span>(V)
 <div id="pblup-of-genetic-values" class="section level1">
 <h1>PBLUP of genetic values</h1>
 <p>Now we compute EBV (<span class="math inline">\(\hat{\mathbf{u}}\)</span>).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">uhatA &lt;-<span class="st"> </span>sigma2A *<span class="st"> </span>A2 %*%<span class="st"> </span><span class="kw">t</span>(Z) %*%<span class="st"> </span>Vinv %*%<span class="st"> </span>(<span class="kw">matrix</span>(y) -<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">predict</span>(fit)))
-uhatA2 &lt;-<span class="st"> </span>sigma2A *<span class="st"> </span>A2 %*%<span class="st"> </span><span class="kw">t</span>(Z) %*%<span class="st"> </span>Vinv %*%<span class="st"> </span>(<span class="kw">matrix</span>(y) -<span class="st"> </span><span class="kw">matrix</span>(X %*%<span class="st"> </span>fit$coefficients))  <span class="co"># alternative</span>
-<span class="kw">table</span>(uhatA ==<span class="st"> </span>uhatA2)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">uhatA &lt;-<span class="st"> </span>sigma2A <span class="op">*</span><span class="st"> </span>A2 <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Vinv <span class="op">%*%</span><span class="st"> </span>(<span class="kw">matrix</span>(y) <span class="op">-</span><span class="st"> </span><span class="kw">matrix</span>(<span class="kw">predict</span>(fit)))
+uhatA2 &lt;-<span class="st"> </span>sigma2A <span class="op">*</span><span class="st"> </span>A2 <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Vinv <span class="op">%*%</span><span class="st"> </span>(<span class="kw">matrix</span>(y) <span class="op">-</span><span class="st"> </span><span class="kw">matrix</span>(X <span class="op">%*%</span><span class="st"> </span>fit<span class="op">$</span>coefficients))  <span class="co"># alternative</span>
+<span class="kw">table</span>(uhatA <span class="op">==</span><span class="st"> </span>uhatA2)
 <span class="kw">head</span>(uhatA)
 <span class="kw">tail</span>(uhatA)</code></pre></div>
 <p>Let’s plot a histogram of EBV.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(uhatA, <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Histogram&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Estimated breeding values&quot;</span>)</code></pre></div>
 <div id="exercise-2" class="section level3">
 <h3>Exercise 2</h3>
-<p>Plot a scatter plot of EBV vs. observed values. Interpret the result.</p>
+<p>Create a scatter plot of EBV vs. observed values. Interpret the result.</p>
 </div>
 <div id="exercise-3" class="section level3">
 <h3>Exercise 3</h3>
@@ -213,7 +217,7 @@ uhatA2 &lt;-<span class="st"> </span>sigma2A *<span class="st"> </span>A2 %*%<sp
 </div>
 <div id="exercise-4" class="section level3">
 <h3>Exercise 4</h3>
-<p>Rank animals based on the EBV. Show the top six and bottom six animal IDs and thier EBV. Use the <code>order()</code> function.</p>
+<p>Rank animals based on the EBV. Show the top six and bottom six animal IDs and their EBV. Use the <code>order()</code> function.</p>
 </div>
 <div id="exercise-5" class="section level3">
 <h3>Exercise 5</h3>
@@ -227,7 +231,7 @@ uhatA2 &lt;-<span class="st"> </span>sigma2A *<span class="st"> </span>A2 %*%<sp
 <span class="kw">library</span>(regress)
 <span class="st">`</span><span class="dt">?</span><span class="st">`</span>(regress)
 
-varcomp2 &lt;-<span class="st"> </span><span class="kw">regress</span>(y ~<span class="st"> </span>X, ~A2)
+varcomp2 &lt;-<span class="st"> </span><span class="kw">regress</span>(y <span class="op">~</span><span class="st"> </span>X, <span class="op">~</span>A2)
 <span class="kw">summary</span>(varcomp2)</code></pre></div>
 <div id="exercise-6" class="section level3">
 <h3>Exercise 6</h3>
