@@ -161,7 +161,7 @@ BLUP(\mathbf{u}) &amp;= E(\mathbf{u} | \mathbf{y}) \\
 </div>
 <div id="computing-a-genomic-relationship-matrix-g" class="section level1">
 <h1>Computing a genomic relationship matrix (G)</h1>
-<p>We will compute the <span class="math inline">\(\mathbf{G}\)</span> matrix defined by VanRaden (2008). The function <code>computeG()</code> accepts a genotype matrix and a cutoff point for minor allele frequency (MAF).</p>
+<p>We will compute the <span class="math inline">\(\mathbf{G}\)</span> matrix defined by VanRaden (2008). The function <code>computeG()</code> accepts two arguments: 1) a genotype matrix and 2) a cutoff point for minor allele frequency (MAF).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">computeG &lt;-<span class="st"> </span><span class="cf">function</span>(W, maf) {
     p &lt;-<span class="st"> </span><span class="kw">colMeans</span>(W)<span class="op">/</span><span class="dv">2</span>
     maf2 &lt;-<span class="st"> </span><span class="kw">pmin</span>(p, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p)
