@@ -182,7 +182,7 @@ X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class
 <span class="st">`</span><span class="dt">?</span><span class="st">`</span>(varComp)
 
 y &lt;-<span class="st"> </span>dat<span class="op">$</span>BWT
-varcomp &lt;-<span class="st"> </span><span class="kw">varComp</span>(<span class="dt">fixed =</span> y <span class="op">~</span><span class="st"> </span>X, <span class="dt">random =</span> <span class="op">~</span>Z, <span class="dt">varcov =</span> A2)
+varcomp &lt;-<span class="st"> </span><span class="kw">varComp</span>(<span class="dt">fixed =</span> y <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>X, <span class="dt">random =</span> <span class="op">~</span>Z, <span class="dt">varcov =</span> A2)
 sigma2A &lt;-<span class="st"> </span>varcomp<span class="op">$</span>varComps  <span class="co"># additive genetic variance</span>
 sigma2A
 sigma2e &lt;-<span class="st"> </span>varcomp<span class="op">$</span>sigma2  <span class="co"># residual variance </span>
@@ -220,7 +220,7 @@ uhatA2 &lt;-<span class="st"> </span>sigma2A <span class="op">*</span><span clas
 </div>
 <div id="exercise-4" class="section level3">
 <h3>Exercise 4</h3>
-<p>Rank animals based on the EBV. Show the top six and bottom six animal IDs and their EBV. Use the <code>order()</code> function.</p>
+<p>Rank animals based on the EBV. Show the top six animal IDs and their EBV. Use the <code>order()</code> function.</p>
 </div>
 <div id="exercise-5" class="section level3">
 <h3>Exercise 5</h3>
@@ -234,7 +234,7 @@ uhatA2 &lt;-<span class="st"> </span>sigma2A <span class="op">*</span><span clas
 <span class="kw">library</span>(regress)
 <span class="st">`</span><span class="dt">?</span><span class="st">`</span>(regress)
 
-varcomp2 &lt;-<span class="st"> </span><span class="kw">regress</span>(y <span class="op">~</span><span class="st"> </span>X, <span class="op">~</span>A2)
+varcomp2 &lt;-<span class="st"> </span><span class="kw">regress</span>(y <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>X, <span class="op">~</span>A2)
 <span class="kw">summary</span>(varcomp2)</code></pre></div>
 <div id="exercise-6" class="section level3">
 <h3>Exercise 6</h3>
