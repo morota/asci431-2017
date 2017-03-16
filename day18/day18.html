@@ -176,7 +176,7 @@ X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class
 </div>
 <div id="variance-components-estimation-using-the-varcomp-package" class="section level1">
 <h1>Variance components estimation using the varComp package</h1>
-<p>The <code>varComp()</code> function in the <a href="https://cran.r-project.org/web/packages/varComp/index.html">varComp</a> package fit a liner mixed model and estimate variance components (<span class="math inline">\(\sigma^2_A\)</span> and <span class="math inline">\(\sigma^2_e\)</span>) through a restricted maximum likelihood (REML). The variance-covariance structure of <span class="math inline">\(\mathbf{u}\)</span> (<code>argument = varcov</code>) is given by the numerator relationship matrix <span class="math inline">\(\mathbf{A}\)</span>.</p>
+<p>The <code>varComp()</code> function in the <a href="https://cran.r-project.org/web/packages/varComp/index.html">varComp</a> package fits a liner mixed model and estimate variance components (<span class="math inline">\(\sigma^2_A\)</span> and <span class="math inline">\(\sigma^2_e\)</span>) through a restricted maximum likelihood (REML). The variance-covariance structure of <span class="math inline">\(\mathbf{u}\)</span> (<code>argument = varcov</code>) is given by the numerator relationship matrix <span class="math inline">\(\mathbf{A}\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;varComp&quot;</span>)
 <span class="kw">library</span>(varComp)
 <span class="st">`</span><span class="dt">?</span><span class="st">`</span>(varComp)
@@ -194,7 +194,7 @@ sigma2e</code></pre></div>
 </div>
 <div id="inverse-of-v" class="section level1">
 <h1>Inverse of V</h1>
-<p>Here we compute the inverse of <span class="math inline">\(V\)</span> matrix. We will use 1) the multiplication operator <code>%*%</code> and 2) the function <code>solve()</code> to obtain a inverse of matrix.</p>
+<p>Here we compute the inverse of <span class="math inline">\(V\)</span> matrix. We will use 1) the multiplication operator <code>%*%</code> and 2) the function <code>solve()</code> to obtain the inverse of matrix.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">V &lt;-<span class="st"> </span>Z <span class="op">%*%</span><span class="st"> </span>A2 <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">*</span><span class="st"> </span>sigma2A <span class="op">+</span><span class="st"> </span>I <span class="op">*</span><span class="st"> </span>sigma2e
 <span class="kw">dim</span>(V)
 Vinv &lt;-<span class="st"> </span><span class="kw">solve</span>(V)
@@ -220,7 +220,7 @@ uhatA2 &lt;-<span class="st"> </span>sigma2A <span class="op">*</span><span clas
 </div>
 <div id="exercise-4" class="section level3">
 <h3>Exercise 4</h3>
-<p>Rank animals based on the EBV. Show the top six animal IDs and their EBV. Use the <code>order()</code> function.</p>
+<p>Rank animals based on their EBV. Show the top six animal IDs and their EBV. Use the <code>order()</code> function.</p>
 </div>
 <div id="exercise-5" class="section level3">
 <h3>Exercise 5</h3>
