@@ -116,7 +116,7 @@ $(document).ready(function () {
 </div>
 <div id="load-r-objects" class="section level1">
 <h1>Load R objects</h1>
-<p>Use the function <code>load()</code> to load the phenotype object <a href="http://morotalab.org/asci431-2017/day17/day17.html">dat_day17.Rda</a>, the OLS fit object <a href="http://morotalab.org/asci431-2017/day17/day17.html">fit_day17.Rda</a>, the numerator relationship matrix <a href="http://morotalab.org/asci431-2017/day07/day07.html">A2.Rda</a>, the genotype matrix <a href="http://morotalab.org/asci431-2017/day05/day05.html">W.Rda</a>, the results from pedigree-based BLUP <a href="http://morotalab.org/asci431-2017/day18/day18.html">day18.Rda</a>, and the results from genomic BLUP <a href="http://morotalab.org/asci431-2017/day18/day18.html">day18.Rda</a> we created in class.</p>
+<p>Use the function <code>load()</code> to load the phenotype object <a href="http://morotalab.org/asci431-2017/day17/day17.html">dat_day17.Rda</a>, the OLS fit object <a href="http://morotalab.org/asci431-2017/day17/day17.html">fit_day17.Rda</a>, the numerator relationship matrix <a href="http://morotalab.org/asci431-2017/day07/day07.html">A2.Rda</a>, the genotype matrix <a href="http://morotalab.org/asci431-2017/day05/day05.html">W.Rda</a>, the results from pedigree-based BLUP <a href="http://morotalab.org/asci431-2017/day18/day18.html">day18.Rda</a>, and the results from genomic BLUP <a href="http://morotalab.org/asci431-2017/day20/day20.html">day20.Rda</a> we created in class.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="kw">file.choose</span>())  <span class="co"># dat_day17.Rda</span>
 <span class="kw">dim</span>(dat)
 <span class="kw">load</span>(<span class="kw">file.choose</span>())  <span class="co"># fit_day17.Rda</span>
@@ -126,15 +126,20 @@ $(document).ready(function () {
 <span class="kw">load</span>(<span class="kw">file.choose</span>())  <span class="co"># W.Rda</span>
 <span class="kw">dim</span>(W)
 <span class="kw">load</span>(<span class="kw">file.choose</span>())  <span class="co"># day18.Rda</span>
+<span class="kw">load</span>(<span class="kw">file.choose</span>())  <span class="co"># day20.Rda</span>
 
 <span class="kw">ls</span>()</code></pre></div>
 </div>
 <div id="statistical-model" class="section level1">
 <h1>Statistical model</h1>
 <p>The statistical model we will fit is given by <span class="math display">\[
-\mathbf{y} = \mathbf{X}\mathbf{b} + \mathbf{Z}\mathbf{u} + \mathbf{e},
-\]</span> where <span class="math inline">\(\mathbf{y}\)</span> is the vector of birth weights, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> are incident matrices for fixed and random effects, respectively, <span class="math inline">\(\mathbf{b}\)</span> is the vector of regression coefficients for fixed effects, <span class="math inline">\(\mathbf{u}\)</span> is the vector of regression coefficients for random genetic values, and <span class="math inline">\(\mathbf{e}\)</span> is the vector of residuals.</p>
-<p>Henderson (1949, 1950, 1959, 1963, 1975) (e.g., <a href="https://www.jstor.org/stable/2529430">doi: 10.2307/2529430</a>) maximized the joint distribution of phenotype <span class="math inline">\(\mathbf{y}\)</span> and random effect <span class="math inline">\(\mathbf{u}\)</span> to derive mixed model equations (MME). <span class="math display">\[
+\begin{align*}
+\mathbf{y} &amp;= \mathbf{X}\mathbf{b} + \mathbf{Z}\mathbf{u} + \mathbf{e} \\
+\mathbf{u} &amp; \sim MVN(0, \mathbf{K}\sigma^2_K) \\
+\mathbf{e} &amp; \sim MVN(0, \mathbf{I}\sigma^2_e) \\
+\end{align*}
+\]</span> where <span class="math inline">\(\mathbf{y}\)</span> is the vector of birth weights, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> are incident matrices for fixed and random effects, respectively, <span class="math inline">\(\mathbf{b}\)</span> is the vector of regression coefficients for fixed effects, <span class="math inline">\(\mathbf{u}\)</span> is the vector of regression coefficients for random genetic values, <span class="math inline">\(\mathbf{K}\)</span> is the relationship matrix either takes the <span class="math inline">\(\mathbf{A}\)</span> or the <span class="math inline">\(\mathbf{G}\)</span> matrix, and <span class="math inline">\(\mathbf{e}\)</span> is the vector of residuals.</p>
+<p>Henderson (1949; 1950; 1959; 1963; 1975) (e.g., <a href="https://www.jstor.org/stable/2529430">doi: 10.2307/2529430</a>) maximized the joint distribution of phenotype <span class="math inline">\(\mathbf{y}\)</span> and random effect <span class="math inline">\(\mathbf{u}\)</span> to derive mixed model equations (MME). <span class="math display">\[
 \begin{align}
 \begin{bmatrix}
 \mathbf{X&#39;X} &amp;  \mathbf{X&#39;Z} \\
@@ -149,7 +154,7 @@ $(document).ready(function () {
 \mathbf{Z&#39;y}
 \end{bmatrix}
 \end{align}
-\]</span> where <span class="math inline">\(\mathbf{K}\)</span> is the relationship matrix either takes the <span class="math inline">\(\mathbf{A}\)</span> or the <span class="math inline">\(\mathbf{G}\)</span> matrix, and <span class="math inline">\(\lambda\)</span> is the ratio of variance components <span class="math inline">\(\frac{\sigma^2_e}{\sigma^2_A}\)</span> or <span class="math inline">\(\frac{\sigma^2_e}{\sigma^2_G}\)</span>.</p>
+\]</span> where <span class="math inline">\(\lambda\)</span> is the ratio of variance components <span class="math inline">\(\frac{\sigma^2_e}{\sigma^2_A}\)</span> or <span class="math inline">\(\frac{\sigma^2_e}{\sigma^2_G}\)</span>.</p>
 <p>Henderson later showed that <span class="math inline">\(\hat{\mathbf{b}}\)</span> from the above equation is a solution for generalized least square estimate and linear combination of <span class="math inline">\(\hat{\mathbf{b}}\)</span> and <span class="math inline">\(\hat{\mathbf{u}}\)</span> is BLUP. Thus, we can obtain BLUE of <span class="math inline">\(\hat{\mathbf{b}}\)</span> and BLUP of <span class="math inline">\(\hat{\mathbf{u}}\)</span> simultaneously by solveing MME. <span class="math display">\[
 \begin{align}
 \begin{bmatrix}
@@ -203,7 +208,7 @@ $(document).ready(function () {
     
 }
 
-
+y &lt;-<span class="st"> </span>dat<span class="op">$</span>BWT
 sol.mme &lt;-<span class="st"> </span><span class="kw">computeMME</span>(<span class="dt">y =</span> y, <span class="dt">X =</span> X, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A2, <span class="dt">G =</span> G)</code></pre></div>
 <p>The vectors <code>sol.mme$A</code> and <code>sol.mme$G</code> include MME solutions derived from pedigree and genomics, respectively. The length of vectors is equal to the sum of BLUE and BLUP solutions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(sol.mme<span class="op">$</span>A)
@@ -215,14 +220,14 @@ sol.mme &lt;-<span class="st"> </span><span class="kw">computeMME</span>(<span c
 <div id="exercise-2" class="section level3">
 <h3>Exercise 2</h3>
 <p>Compare the estimates of EBV and GEBV obtained from PBLUP (<code>uhatA</code>), GBLUP (<code>uhatG</code>), pedigree-based MME (<code>sol.mme$A</code>), and genome-based MME (<code>sol.mme$G</code>). Use the <code>cor()</code> function to calculate correlations.</p>
-<p>How EBVs and GEBVs are distributed? The boxplot result below indicates that the <span class="math inline">\(\mathbf{G}\)</span> matrix shrinks estimates of breeding values more stronger toward zero than those the <span class="math inline">\(\mathbf{A}\)</span> matrix.</p>
+<p>How EBVs and GEBVs are distributed? The boxplot result below indicates that the <span class="math inline">\(\mathbf{G}\)</span> matrix shrinks estimates of breeding values more closer toward zero than those from the <span class="math inline">\(\mathbf{A}\)</span> matrix.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">c</span>(uhatA), sol.mme<span class="op">$</span>A[<span class="dv">4</span><span class="op">:</span><span class="kw">length</span>(sol.mme<span class="op">$</span>A)], <span class="kw">c</span>(uhatG), sol.mme<span class="op">$</span>G[<span class="dv">4</span><span class="op">:</span><span class="kw">length</span>(sol.mme<span class="op">$</span>G)], 
     <span class="dt">names =</span> <span class="kw">c</span>(<span class="st">&quot;PBLUP&quot;</span>, <span class="st">&quot;PBLUP.MME&quot;</span>, <span class="st">&quot;GBLUP&quot;</span>, <span class="st">&quot;GBLUP.MME&quot;</span>), <span class="dt">ylab =</span> <span class="st">&quot;Breeding values&quot;</span>)</code></pre></div>
 </div>
 </div>
 <div id="the-regress-package" class="section level1">
 <h1>The regress package</h1>
-<p>The <a href="https://cran.r-project.org/web/packages/regress/index.html">regress</a> package also estimates BLUE and predicts BLUP. The <code>regress()</code> function estimates variance components and BLUE and the function <code>BLUP</code> predicts breeding values.</p>
+<p>The <a href="https://cran.r-project.org/web/packages/regress/index.html">regress</a> package also estimates BLUE and predicts BLUP. The <code>regress()</code> function estimates variance components and BLUE; the function <code>BLUP</code> predicts breeding values.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(regress)
 varcompA &lt;-<span class="st"> </span><span class="kw">regress</span>(y <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>X, <span class="op">~</span>A)
 varcompG &lt;-<span class="st"> </span><span class="kw">regress</span>(y <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>X, <span class="op">~</span>G)
@@ -232,7 +237,7 @@ regress.A &lt;-<span class="st"> </span><span class="kw">BLUP</span>(varcompA)
 regress.G &lt;-<span class="st"> </span><span class="kw">BLUP</span>(varcompG)</code></pre></div>
 <div id="exercise-3" class="section level3">
 <h3>Exercise 3</h3>
-<p>Compare the estimates of fixed effects obtained from OLS, pedigree-based MME, genome-based MME, and the regress package. Use the <code>cor()</code> function to calculate correlations.</p>
+<p>Compare the estimates of fixed effects obtained from the following: OLS, pedigree-based MME, genome-based MME, and the regress package. Use the <code>cor()</code> function to calculate correlations.</p>
 <p>Here we add the results from the regress package into the boxplot in order to summarize the distributions of EBVs and GEBVs.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">c</span>(uhatA), sol.mme<span class="op">$</span>A[<span class="dv">4</span><span class="op">:</span><span class="kw">length</span>(sol.mme<span class="op">$</span>A)], regress.A<span class="op">$</span>Mean, <span class="kw">c</span>(uhatG), 
     sol.mme<span class="op">$</span>G[<span class="dv">4</span><span class="op">:</span><span class="kw">length</span>(sol.mme<span class="op">$</span>G)], regress.G<span class="op">$</span>Mean, <span class="dt">names =</span> <span class="kw">c</span>(<span class="st">&quot;PBLUP&quot;</span>, <span class="st">&quot;PBLUP.MME&quot;</span>, 

@@ -208,7 +208,7 @@ X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class
 </div>
 <div id="variance-components-estimation-using-the-varcomp-package" class="section level1">
 <h1>Variance components estimation using the varComp package</h1>
-<p>The <code>varComp()</code> function in the <a href="https://cran.r-project.org/web/packages/varComp/index.html">varComp</a> package fits a liner mixed model and estimate variance components (<span class="math inline">\(\sigma^2_G\)</span> and <span class="math inline">\(\sigma^2_e\)</span>) through a restricted maximum likelihood (REML). The variance-covariance structure of <span class="math inline">\(\mathbf{u}\)</span> (<code>argument = varcov</code>) is given by the genomic relationship matrix <span class="math inline">\(\mathbf{G}\)</span>.</p>
+<p>The <code>varComp()</code> function in the <a href="https://cran.r-project.org/web/packages/varComp/index.html">varComp</a> package fits a liner mixed model and estimates variance components (<span class="math inline">\(\sigma^2_G\)</span> and <span class="math inline">\(\sigma^2_e\)</span>) through a restricted maximum likelihood (REML). The variance-covariance structure of <span class="math inline">\(\mathbf{u}\)</span> (<code>argument = varcov</code>) is given by the genomic relationship matrix <span class="math inline">\(\mathbf{G}\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;varComp&quot;</span>)
 <span class="kw">library</span>(varComp)
 <span class="st">`</span><span class="dt">?</span><span class="st">`</span>(varComp)
@@ -275,7 +275,7 @@ varcomp2 &lt;-<span class="st"> </span><span class="kw">regress</span>(y <span c
 </div>
 <div id="save-as-r-object" class="section level1">
 <h1>Save as R object</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">save</span>(uhatG, h2G, h2G.a, <span class="dt">file =</span> <span class="st">&quot;day20.Rda&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">save</span>(uhatG, h2G, h2G.a, G, <span class="dt">file =</span> <span class="st">&quot;day20.Rda&quot;</span>)</code></pre></div>
 </div>
 </div>
 
