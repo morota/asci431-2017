@@ -209,6 +209,7 @@ $(document).ready(function () {
 }
 
 y &lt;-<span class="st"> </span>dat<span class="op">$</span>BWT
+dat2 &lt;-<span class="st"> </span>dat[, <span class="kw">c</span>(<span class="st">&quot;AgeDam.mon.&quot;</span>, <span class="st">&quot;SEX&quot;</span>)]
 sol.mme &lt;-<span class="st"> </span><span class="kw">computeMME</span>(<span class="dt">y =</span> y, <span class="dt">X =</span> X, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A2, <span class="dt">G =</span> G)</code></pre></div>
 <p>The vectors <code>sol.mme$A</code> and <code>sol.mme$G</code> include MME solutions derived from pedigree and genomics, respectively. The length of vectors is equal to the sum of BLUE and BLUP solutions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(sol.mme<span class="op">$</span>A)
@@ -229,7 +230,7 @@ sol.mme &lt;-<span class="st"> </span><span class="kw">computeMME</span>(<span c
 <h1>The regress package</h1>
 <p>The <a href="https://cran.r-project.org/web/packages/regress/index.html">regress</a> package also estimates BLUE and predicts BLUP. The <code>regress()</code> function estimates variance components and BLUE; the function <code>BLUP</code> predicts breeding values.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(regress)
-varcompA &lt;-<span class="st"> </span><span class="kw">regress</span>(y <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>X, <span class="op">~</span>A)
+varcompA &lt;-<span class="st"> </span><span class="kw">regress</span>(y <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>X, <span class="op">~</span>A2)
 varcompG &lt;-<span class="st"> </span><span class="kw">regress</span>(y <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>X, <span class="op">~</span>G)
 
 
