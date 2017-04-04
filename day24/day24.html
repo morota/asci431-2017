@@ -234,7 +234,7 @@ ahat2 &lt;-<span class="st"> </span>sigma2a <span class="op">*</span><span class
 <p>The corresponding MME is givin by simply replacing <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\mathbf{K}\)</span> in the relationship-based MME with <span class="math inline">\(\mathbf{W}\)</span> and <span class="math inline">\(I_{m \times m}\)</span>, respectively. <span class="math display">\[
 \begin{align}
 \begin{bmatrix}
-\mathbf{X&#39;X} &amp;  \mathbf{X&#39;Z} \\
+\mathbf{X&#39;X} &amp;  \mathbf{X&#39;W} \\
 \mathbf{W&#39;X} &amp;  \mathbf{W&#39;W}  + \mathbf{I}^{-1} \lambda
 \end{bmatrix}
 \begin{bmatrix}
@@ -255,7 +255,7 @@ ahat2 &lt;-<span class="st"> </span>sigma2a <span class="op">*</span><span class
 \hat{\mathbf{a}} 
 \end{bmatrix} =
 \begin{bmatrix}
-\mathbf{X&#39;X} &amp;  \mathbf{X&#39;Z} \\
+\mathbf{X&#39;X} &amp;  \mathbf{X&#39;W} \\
 \mathbf{W&#39;X} &amp;  \mathbf{W&#39;W}  + \mathbf{I}^{-1} \lambda
 \end{bmatrix}^{-1}
 \begin{bmatrix}
@@ -272,6 +272,8 @@ ahat2 &lt;-<span class="st"> </span>sigma2a <span class="op">*</span><span class
 <span class="kw">library</span>(rrBLUP)
 rr &lt;-<span class="st"> </span><span class="kw">mixed.solve</span>(y, <span class="dt">X =</span> X, <span class="dt">Z =</span> W2)
 <span class="kw">names</span>(rr)
+
+rr<span class="op">$</span>beta  <span class="co"># fixed effect</span>
 
 rr<span class="op">$</span>Vu  <span class="co"># additive SNP variance </span>
 rr<span class="op">$</span>Ve  <span class="co"># residual variance </span>
