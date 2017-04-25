@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Gota Morota" />
+
+<meta name="date" content="2017-04-25" />
+
+<title>Economic selection indices for multiple traits</title>
+
+<script src="day31_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="day31_files/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+<script src="day31_files/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+<script src="day31_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="day31_files/navigation-1.1/tabsets.js"></script>
+<script src="day31_files/navigation-1.1/codefolding.js"></script>
+<link href="day31_files/magnific-popup-1.1.0/magnific-popup.css" rel="stylesheet" />
+<script src="day31_files/magnific-popup-1.1.0/jquery.magnific-popup.min.js"></script>
+<link href="day31_files/readthedown-0.1/readthedown.css" rel="stylesheet" />
+<script src="day31_files/readthedown-0.1/readthedown.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #ffffff; color: #1f1c1b; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #ffffff; color: #a0a0a0; border-right: 1px solid #a0a0a0; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #1f1c1b; background-color: #ffffff; }
+code > span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code > span.dt { color: #0057ae; } /* DataType */
+code > span.dv { color: #b08000; } /* DecVal */
+code > span.bn { color: #b08000; } /* BaseN */
+code > span.fl { color: #b08000; } /* Float */
+code > span.cn { color: #aa5500; } /* Constant */
+code > span.ch { color: #924c9d; } /* Char */
+code > span.sc { color: #3daee9; } /* SpecialChar */
+code > span.st { color: #bf0303; } /* String */
+code > span.vs { color: #bf0303; } /* VerbatimString */
+code > span.ss { color: #ff5500; } /* SpecialString */
+code > span.im { color: #ff5500; } /* Import */
+code > span.co { color: #898887; } /* Comment */
+code > span.do { color: #607880; } /* Documentation */
+code > span.an { color: #ca60ca; } /* Annotation */
+code > span.cv { color: #0095ff; } /* CommentVar */
+code > span.ot { color: #006e28; } /* Other */
+code > span.fu { color: #644a9b; } /* Function */
+code > span.va { color: #0057ae; } /* Variable */
+code > span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #1f1c1b; } /* Operator */
+code > span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code > span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code > span.pp { color: #006e28; } /* Preprocessor */
+code > span.at { color: #0057ae; } /* Attribute */
+code > span.re { color: #0057ae; } /* RegionMarker */
+code > span.in { color: #b08000; } /* Information */
+code > span.wa { color: #bf0303; } /* Warning */
+code > span.al { color: #bf0303; font-weight: bold; } /* Alert */
+code > span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code > span. { color: #1f1c1b; } /* Normal */
+</style>
+
+
+</head>
+
+<body>
+
+
+<div id="content" data-toggle="wy-nav-shift">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+<nav id="nav-top" role="navigation" aria-label="top navigation">
+    <a role="button" href="#" data-toggle="wy-nav-top"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+</nav>
+
+
+<div id="header">
+<h1 class="title">Economic selection indices for multiple traits</h1>
+</div>
+
+
+<div id="table-of-contents">
+    <h2><a href="#content">Economic selection indices for multiple traits</a></h2>
+    <div id="text-table-of-contents">
+      <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#phenotypic-covariance-matrix">Phenotypic covariance matrix</a></li>
+      <li><a href="#genetic-covariance-matrix-pedigree">Genetic covariance matrix (pedigree)</a></li>
+      <li><a href="#genetic-covariance-matrix-genomics">Genetic covariance matrix (genomics)</a></li>
+      <li><a href="#shiny-package">Shiny package</a></li>
+      <li><a href="#interactive-shiny-application">Interactive Shiny application</a></li>
+      </ul>
+    </div>
+</div>
+
+<div id="main">
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>We will build economic selection indices for multiple traits using birth weight (BWT) and calving difficulty (CD) in the beef cattle data.</p>
+</div>
+<div id="phenotypic-covariance-matrix" class="section level1">
+<h1>Phenotypic covariance matrix</h1>
+<p>Variance of BWT is 110.5760529 and variance of z-score transformed CD is 0.9840235, and covariance between BWT and CD is 0.9727331.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">P &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">110.5760529</span>, <span class="fl">0.9727331</span>, <span class="fl">0.9727331</span>, <span class="fl">0.9840235</span>), <span class="dt">ncol =</span> <span class="dv">2</span>)</code></pre></div>
+</div>
+<div id="genetic-covariance-matrix-pedigree" class="section level1">
+<h1>Genetic covariance matrix (pedigree)</h1>
+<p>Additive genetic variance of BWT is 84.561 and additive genetic variance of z-score transformed CD is 0.385, and additive genetic covariance between BWT and CD is 3.635.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">G.A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">84.561</span>, <span class="fl">3.635</span>, <span class="fl">3.635</span>, <span class="fl">0.385</span>), <span class="dt">ncol =</span> <span class="dv">2</span>)</code></pre></div>
+</div>
+<div id="genetic-covariance-matrix-genomics" class="section level1">
+<h1>Genetic covariance matrix (genomics)</h1>
+<p>Additive genomic variance of BWT is 23.780 and additive genomic variance of z-score transformed CD is 0.862, and additive genomic covariance between BWT and CD is 0.077.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">G.G &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">23.78</span>, <span class="fl">0.862</span>, <span class="fl">0.862</span>, <span class="fl">0.077</span>), <span class="dt">ncol =</span> <span class="dv">2</span>)</code></pre></div>
+</div>
+<div id="shiny-package" class="section level1">
+<h1>Shiny package</h1>
+<p>Install the shiny package and load to your R environment.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;shiny&quot;</span>)
+<span class="kw">library</span>(shiny)</code></pre></div>
+</div>
+<div id="interactive-shiny-application" class="section level1">
+<h1>Interactive Shiny application</h1>
+<p>Select ecnomic values for BWT and CD and see how selection index parameters vary between pedigree and genomic information.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output) {
+    
+    P &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">110.5760529</span>, <span class="fl">0.9727331</span>, <span class="fl">0.9727331</span>, <span class="fl">0.9840235</span>), <span class="dt">ncol =</span> <span class="dv">2</span>)
+    G.A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">84.561</span>, <span class="fl">3.635</span>, <span class="fl">3.635</span>, <span class="fl">0.385</span>), <span class="dt">ncol =</span> <span class="dv">2</span>)
+    G.G &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">23.78</span>, <span class="fl">0.862</span>, <span class="fl">0.862</span>, <span class="fl">0.077</span>), <span class="dt">ncol =</span> <span class="dv">2</span>)
+    
+    react &lt;-<span class="st"> </span><span class="kw">reactive</span>({
+        w1 &lt;-<span class="st"> </span>input<span class="op">$</span>obs
+        w2 &lt;-<span class="st"> </span>input<span class="op">$</span>obs2
+        w &lt;-<span class="st"> </span><span class="kw">c</span>(input<span class="op">$</span>obs, input<span class="op">$</span>obs2)
+        <span class="co"># b</span>
+        b.A &lt;-<span class="st"> </span><span class="kw">solve</span>(P) <span class="op">%*%</span><span class="st"> </span>G.A <span class="op">%*%</span><span class="st"> </span>w
+        b.G &lt;-<span class="st"> </span><span class="kw">solve</span>(P) <span class="op">%*%</span><span class="st"> </span>G.G <span class="op">%*%</span><span class="st"> </span>w
+        <span class="co"># sigma HI</span>
+        sigmaHI.A &lt;-<span class="st"> </span><span class="kw">t</span>(b.A) <span class="op">%*%</span><span class="st"> </span>G.A <span class="op">%*%</span><span class="st"> </span>w
+        sigmaHI.G &lt;-<span class="st"> </span><span class="kw">t</span>(b.G) <span class="op">%*%</span><span class="st"> </span>G.G <span class="op">%*%</span><span class="st"> </span>w
+        <span class="co"># sigma2 I</span>
+        sigma2I.A &lt;-<span class="st"> </span><span class="kw">t</span>(b.A) <span class="op">%*%</span><span class="st"> </span>P <span class="op">%*%</span><span class="st"> </span>b.A
+        sigma2I.G &lt;-<span class="st"> </span><span class="kw">t</span>(b.G) <span class="op">%*%</span><span class="st"> </span>P <span class="op">%*%</span><span class="st"> </span>b.G
+        <span class="co"># sigma2 H</span>
+        sigma2H.A &lt;-<span class="st"> </span><span class="kw">t</span>(w) <span class="op">%*%</span><span class="st"> </span>G.A <span class="op">%*%</span><span class="st"> </span>w
+        sigma2H.G &lt;-<span class="st"> </span><span class="kw">t</span>(w) <span class="op">%*%</span><span class="st"> </span>G.G <span class="op">%*%</span><span class="st"> </span>w
+        <span class="co"># r HI accuracy</span>
+        rHI.A &lt;-<span class="st"> </span>sigmaHI.A<span class="op">/</span>(<span class="kw">sqrt</span>(sigma2I.A <span class="op">*</span><span class="st"> </span>sigma2H.A))
+        rHI.G &lt;-<span class="st"> </span>sigmaHI.G<span class="op">/</span>(<span class="kw">sqrt</span>(sigma2I.G <span class="op">*</span><span class="st"> </span>sigma2H.G))
+        <span class="co"># RH</span>
+        RH.A &lt;-<span class="st"> </span>sigmaHI.A<span class="op">/</span><span class="kw">sqrt</span>(sigma2I.A)
+        RH.G &lt;-<span class="st"> </span>sigmaHI.G<span class="op">/</span><span class="kw">sqrt</span>(sigma2I.G)
+        <span class="co"># RE</span>
+        RE.A &lt;-<span class="st"> </span>RH.A<span class="op">/</span>RH.G
+        RE.G &lt;-<span class="st"> </span>RH.G<span class="op">/</span>RH.A
+        
+        df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Pedigree =</span> <span class="kw">c</span>(b.A[<span class="dv">1</span>], b.A[<span class="dv">2</span>], sigmaHI.A, sigma2I.A, 
+            sigma2H.A, rHI.A, RH.A, RE.A), <span class="dt">Genomics =</span> <span class="kw">c</span>(b.G[<span class="dv">1</span>], b.G[<span class="dv">2</span>], sigmaHI.G, 
+            sigma2I.G, sigma2H.G, rHI.G, RH.G, RE.G))
+        <span class="kw">row.names</span>(df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Selection index coefficient for BWT (b1)&quot;</span>, <span class="st">&quot;Selection index coefficient for CD (b2)&quot;</span>, 
+            <span class="st">&quot;Covariance between index and aggregate genotype (sigma_HI)&quot;</span>, <span class="st">&quot;Variance of the index (sigma2_I)&quot;</span>, 
+            <span class="st">&quot;Variance of aggregate genotype (sigma2_H)&quot;</span>, <span class="st">&quot;Selection accuracy (r_HI)&quot;</span>, 
+            <span class="st">&quot;Response (R_H)&quot;</span>, <span class="st">&quot;Relative efficiency&quot;</span>)
+        df
+    })
+    
+    output<span class="op">$</span>view &lt;-<span class="st"> </span><span class="kw">renderTable</span>({
+        <span class="kw">react</span>()
+    }, <span class="dt">include.rownames =</span> <span class="ot">TRUE</span>)
+    
+}
+
+
+
+
+ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(<span class="kw">sidebarLayout</span>(<span class="kw">sidebarPanel</span>(<span class="kw">numericInput</span>(<span class="st">&quot;obs&quot;</span>, <span class="st">&quot;Economic value for BWT (w1):&quot;</span>, 
+    <span class="op">-</span><span class="dv">1</span>), <span class="kw">numericInput</span>(<span class="st">&quot;obs2&quot;</span>, <span class="st">&quot;Economic value for CD (w2):&quot;</span>, <span class="op">-</span><span class="dv">2</span>)), <span class="kw">mainPanel</span>(<span class="kw">tableOutput</span>(<span class="st">&quot;view&quot;</span>))))
+
+
+
+<span class="kw">shinyApp</span>(<span class="dt">ui =</span> ui, <span class="dt">server =</span> server)</code></pre></div>
+</div>
+</div>
+
+
+</div>
+
+<div id="postamble" data-toggle="wy-nav-shift" class="status">
+<p class="author"><span class="glyphicon glyphicon-user"></span> Gota Morota</p>
+<p class="date"><span class="glyphicon glyphicon-calendar"></span> April 25, 2017</p>
+</div>
+
+
+<script>
+$(document).ready(function () {
+ 	  });
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
